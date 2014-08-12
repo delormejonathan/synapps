@@ -1,0 +1,21 @@
+{
+    "name": "inneair/synapps",
+    "version": "1.0.0",
+    "type": "project",
+    "description": "Synapps",
+    "keywords": ["inneair", "synapps", "file", "system"],
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Innéair",
+            "homepage": "http://www.inneair.com/"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
+    "require": {
+        "php": "5.5.*"
+    },
+    "minimum-stability": "stable"
+}
