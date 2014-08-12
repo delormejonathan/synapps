@@ -5,7 +5,7 @@ Inneair Synapps
 
 This library contains several high-level interfaces, aiming at improving application development and test. The main features are:
 * Many high level object-oriented interfaces with files, O/S, system runtime, command line, and PHP runtime.
-* An HTTP dedicated class encapsulating HTTP header names.
+* A HTTP dedicated class encapsulating HTTP header names.
 * A set of meaningful exception class ready-to-use
 
 ------
@@ -30,8 +30,6 @@ Syntax for changes: `<type of modification> [domain] <description>`
 
 ------
 
-## 1.0.0-it1 (2014-08-12) ##
+## 1.0.0-it1 (2014-09-14) ##
 
- * NEW Added High-level file I/O interface.
- * NEW Added High-level system and runtime interfaces.
- * NEW Added general meaningful exceptions, ready for use.
+ * NEW Migration into a dedicated VCS.
