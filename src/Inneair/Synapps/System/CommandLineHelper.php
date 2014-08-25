@@ -43,36 +43,31 @@ class CommandLineHelper
             // Arguments format: --foo --bar=baz
             if (substr($arg, 0, 2) === '--') {
                 $eqPos = strpos($arg, '=');
-
-                // --foo
                 if ($eqPos === false) {
+                    // --foo
                     $key = substr($arg, 2);
                     $value = isset($out[$key]) ? $out[$key] : true;
-                }
-                // --bar=baz
-                else {
+                } else {
+                    // --bar=baz
                     $key = substr($arg, 2, $eqPos - 2);
                     $value = substr($arg, $eqPos + 1);
                 }
-            }
-            // Arguments format: -k=value -abc
-            elseif (substr($arg, 0, 1) === '-') {
-                // -k=value
+            } elseif (substr($arg, 0, 1) === '-') {
+                // Arguments format: -k=value -abc
                 if (substr($arg, 2, 1) === '=') {
+                    // -k=value
                     $key = substr($arg, 1, 1);
                     $value = substr($arg, 3);
-                }
-                // -abc
-                else {
+                } else {
+                    // -abc
                     $chars = str_split(substr($arg, 1));
                     foreach ($chars as $char) {
                         $key = $char;
                         $value = isset($out[$key]) ? $out[$key] : true;
                     }
                 }
-            }
-            // plain-arg
-            else {
+            } else {
+                // plain-arg
                 $value = $arg;
                 $key = $plainArgIndex;
                 $plainArgIndex++;
