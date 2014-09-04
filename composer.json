@@ -18,7 +18,9 @@
 	"autoload" : {
 		"psr-4" : {
 			"Inneair\\Synapps\\" : [
-				"src/Inneair/Synapps/"			]
+				"src/",
+				"test/"
+			]
 		}
 	},
 	"require" : {
