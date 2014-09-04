@@ -12,7 +12,7 @@ This library contains several high-level interfaces, aiming at improving applica
 
 # Change log #
 
-This changelog references the relevant changes (bug fixes, security fixes, new features, improvements, documentation fixes) done in Tegami.
+This changelog references the relevant changes (bug fixes, security fixes, new features, improvements, documentation fixes) done in the library.
 
 Syntax for changes: `<type of modification> [domain] <description>`
 
