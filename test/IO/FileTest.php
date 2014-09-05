@@ -8,14 +8,12 @@ use Inneair\Synapps\IO\File;
 use Inneair\Synapps\IO\FileNotFoundException;
 use Inneair\Synapps\IO\FileUtils;
 use Inneair\Synapps\IO\IOException;
-use Inneair\Synapps\Test\AbstractTest;
+use Inneair\Synapps\Test\AbstractSynappsTest;
 
 /**
  * Class containing test suite for the file class.
- * 
- * @author Innéair
  */
-class FileTest extends AbstractTest
+class FileTest extends AbstractSynappsTest
 {
     /**
      * Name of a file that does not exist.
@@ -61,19 +59,6 @@ class FileTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    public function setUp()
-    {
-        parent::setUp();
-
-//         FileUtils::copyFile(
-//             $this->getDataPath() . File::DIRECTORY_SEPARATOR . self::EXISTING_FILENAME,
-//             $this->getDataPath() . File::DIRECTORY_SEPARATOR . self::FILE_NAME_1
-//         );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function clean()
     {
         parent::clean();
@@ -84,11 +69,6 @@ class FileTest extends AbstractTest
             $this->getDataPathPrefix() . self::EXISTING_DIRECTORY_1 . File::DIRECTORY_SEPARATOR . self::FILE_NAME_1,
             true
          );
-//         FileUtils::deleteFile(WEBSITE_SYS_TMP . mb_strtoupper(self::EXISTING_FILENAME), true);
-//         FileUtils::deleteFile(WEBSITE_SYS_TMP . self::FILE_NAME_1, true);
-//         FileUtils::deleteFile(SYSTEM . self::FILE_NAME_2);
-//         FileUtils::deleteFile(ROOT . self::FILE_NAME_1);
-//         FileUtils::deleteFile(WEBSITE_SYS_TMP . '..' . File::DIRECTORY_SEPARATOR . self::FILE_NAME_1);
     }
 
     /**

@@ -2,14 +2,11 @@
 
 namespace Inneair\Synapps\Test;
 
-use Exception;
 use PHPUnit_Framework_TestCase;
 
 /**
  * Base class for all PHPUnit tests, providing a cleaning method which ensures test environment is reset correctly
  * between each test case.
- *
- * @author Innéair
  */
 abstract class AbstractTest extends PHPUnit_Framework_TestCase
 {
@@ -18,23 +15,6 @@ abstract class AbstractTest extends PHPUnit_Framework_TestCase
      * @var string
      */
     const ASSERT_EXPECTED_EXCEPTION_MESSAGE = 'Expected exception did not occur.';
-
-    /**
-     * Absolute path of the data directory.
-     * @var string
-     */
-    private $dataPath;
-    /**
-     * Absolute path prefix of the data directory, ending with a directory separator.
-     * @var string
-     */
-    private $dataPathPrefix;
-
-    public function __construct()
-    {
-        $this->dataPath = __DIR__ . '/../data';
-        $this->dataPathPrefix = $this->dataPath . DIRECTORY_SEPARATOR;
-    }
 
     /**
      * Initializes environment for this test execution.
@@ -63,27 +43,6 @@ abstract class AbstractTest extends PHPUnit_Framework_TestCase
      */
     protected function clean()
     {
-    }
-
-    /**
-     * Gets the absolute path to the data directory, at the library's root.
-     *
-     * @return string Path.
-     */
-    protected function getDataPath()
-    {
-        return $this->dataPath;
-    }
-
-    /**
-     * Gets the absolute path to the data directory, at the library's root, for use as a path prefix. The prefix ends
-     * with a directory separator, so as it can be used immediately.
-     *
-     * @return string Path ending with a directory separator, useful to prefix a file name.
-     */
-    protected function getDataPathPrefix()
-    {
-        return $this->dataPathPrefix;
     }
 
     /**
