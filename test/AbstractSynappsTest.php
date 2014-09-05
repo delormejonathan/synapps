@@ -25,15 +25,24 @@ abstract class AbstractSynappsTest extends AbstractTest
      */
     public function setUp()
     {
-        $this->dataPath = __DIR__ . '/../data';
+        $this->dataPath = __DIR__ . DIRECTORY_SEPARATOR . static::getRelativePathToData();
         $this->dataPathPrefix = $this->dataPath . DIRECTORY_SEPARATOR;
-
+    
         // Go on with the setup
         parent::setUp();
     }
 
     /**
-     * Gets the absolute path to the data directory, at the library's root.
+     * 
+     * @return string
+     */
+    protected static function getRelativePathToData()
+    {
+        return '../data/test';
+    }
+
+    /**
+     * Gets the absolute path to the data sub-directory containing test resources, under the library's root.
      *
      * @return string Path.
      */
@@ -43,8 +52,8 @@ abstract class AbstractSynappsTest extends AbstractTest
     }
 
     /**
-     * Gets the absolute path to the data directory, at the library's root, for use as a path prefix. The prefix ends
-     * with a directory separator, so as it can be used immediately.
+     * Gets the absolute path to the data sub-directory containing test resources, under the library's root, for use as
+     * a path prefix. The prefix ends with a directory separator, so as it can be used immediately.
      *
      * @return string Path ending with a directory separator, useful to prefix a file name.
      */
