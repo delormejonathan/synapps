@@ -336,6 +336,16 @@ class File
     }
 
     /**
+     * Gets the base name of this file.
+     *
+     * @return string Base name of this file.
+     */
+    public function getBasename()
+    {
+        return pathinfo($this->path, PATHINFO_BASENAME);
+    }
+
+    /**
      * Reads and returns the content of this file.
      *
      * @throws IOException If the file cannot be opened, or the content be read.

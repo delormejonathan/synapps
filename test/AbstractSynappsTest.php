@@ -33,8 +33,9 @@ abstract class AbstractSynappsTest extends AbstractTest
     }
 
     /**
-     * 
-     * @return string
+     * Gets the relative path to the directory containing test data.
+     *
+     * @return string Path.
      */
     protected static function getRelativePathToData()
     {
