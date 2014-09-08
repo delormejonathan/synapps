@@ -514,6 +514,7 @@ class FileTest extends AbstractSynappsTest
         // Renames a non-empty directory.
         $srcFile->delete();
         $destFile->delete();
+        $srcFile = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
         $sourceDirectory = new File($this->getDataPathPrefix() . self::EXISTING_DIRECTORY_1);
         $sourceDirectory->copy($srcFile);
         $destFile = new File($this->getDataPathPrefix() . self::FILE_NAME_2);
@@ -524,7 +525,7 @@ class FileTest extends AbstractSynappsTest
 
         // Renames a non-empty directory (case change only).
         $destFile->delete(true);
-        $srcFile = new File($this->getDataPathPrefix() . self::FILE_NAME_2);
+        $srcFile = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
         $sourceDirectory->copy($srcFile);
         $destFile = new File(
             $srcFile->getParentPath() . File::DIRECTORY_SEPARATOR . mb_strtoupper($srcFile->getName())
