@@ -25,7 +25,7 @@ class UniqueConstraintException extends RuntimeException
      * @param string $code Custom error code (defaults to <code>null</code>).
      * @param Exception $previous Parent exception (defaults to <code>null</code>).
      */
-    public function __construct($property = null, $message = null, $code = null, $previous = null)
+    public function __construct($property = null, $message = null, $code = null, Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->property = $property;
