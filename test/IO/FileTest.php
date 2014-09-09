@@ -64,6 +64,7 @@ class FileTest extends AbstractSynappsTest
         parent::clean();
 
          FileUtils::deleteFile($this->getDataPathPrefix() . self::FILE_NAME_1, true);
+         FileUtils::deleteFile($this->getDataPathPrefix() . mb_strtoupper(self::FILE_NAME_1), true);
          FileUtils::deleteFile($this->getDataPathPrefix() . self::FILE_NAME_2, true);
          FileUtils::deleteFile(
             $this->getDataPathPrefix() . self::EXISTING_DIRECTORY_1 . File::DIRECTORY_SEPARATOR . self::FILE_NAME_1,
