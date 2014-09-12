@@ -13,12 +13,12 @@ abstract class AbstractSynappsTest extends AbstractTest
      * Absolute path of the data directory.
      * @var string
      */
-    private $dataPath;
+    protected $dataPath;
     /**
      * Absolute path prefix of the data directory, ending with a directory separator.
      * @var string
      */
-    private $dataPathPrefix;
+    protected $dataPathPrefix;
 
     /**
      * {@inheritDoc}
