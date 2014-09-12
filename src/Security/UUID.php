@@ -3,6 +3,7 @@
 namespace Inneair\Synapps\Security;
 
 use Exception;
+use Inneair\Synapps\System\OS;
 
 /**
  * This class encapsulates an immutable universally unique identifier (UUID).
@@ -57,7 +58,7 @@ class UUID
      * Generates a Universally Unique IDentifier, version 4.
      *
      * This function generates a truly random UUID. The built in CakePHP String::uuid() function
-     * is not cryptographically secure. You should uses this function instead.
+     * is not cryptographically secure. You should use this function instead.
      *
      * @see http://tools.ietf.org/html/rfc4122#section-4.4
      * @see http://en.wikipedia.org/wiki/UUID
@@ -68,20 +69,18 @@ class UUID
     {
         $pr_bits = null;
         $fp = false;
-        try {
-            $fp = @fopen('/dev/urandom', 'rb');
-            $pr_bits .= @fread($fp, 16);
-            @fclose($fp);
-        } catch (Exception $e) {
-            if ($fp === false) {
-                // If /dev/urandom isn't available (eg: in non-unix systems), use mt_rand().
-                $pr_bits = "";
-                for ($cnt = 0; $cnt < 16; $cnt++) {
-                    $pr_bits .= chr(mt_rand(0, 255));
-                }
-            } else {
+        if (OS::getInstance()->isWindows()) {
+            // If /dev/urandom isn't available (eg: in non-unix systems), use mt_rand().
+            $pr_bits = "";
+            for ($cnt = 0; $cnt < 16; $cnt++) {
+                $pr_bits .= chr(mt_rand(0, 255));
+            }
+        } else {
+            try {
+                $fp = @fopen('/dev/urandom', 'rb');
+                $pr_bits .= @fread($fp, 16);
+            } finally {
                 @fclose($fp);
-                throw $e;
             }
         }
 
