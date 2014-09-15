@@ -402,7 +402,7 @@ class File
     }
 
     /**
-     * Gets the name of this file (without the parent path).
+     * Gets the name of this file (without the parent path, but with the extension).
      *
      * @return string File name.
      */
