@@ -10,6 +10,7 @@ class PhpRuntime
 {
     /**
      * Prevents unwanted instanciation.
+     * @codeCoverageIgnore
      */
     private function __construct()
     {

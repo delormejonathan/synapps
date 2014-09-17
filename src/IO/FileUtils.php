@@ -9,6 +9,7 @@ class FileUtils
 {
     /**
      * Prevents unwanted instanciations.
+     * @codeCoverageIgnore
      */
     private function __construct()
     {

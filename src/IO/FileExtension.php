@@ -13,6 +13,7 @@ final class FileExtension
 
     /**
      * Private constructor prevents erroneous instanciations.
+     * @codeCoverageIgnore
      */
     private function __construct()
     {

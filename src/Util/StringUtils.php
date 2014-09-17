@@ -45,6 +45,7 @@ final class StringUtils
 
     /**
      * Empty private constructor to prevent erroneous instanciations.
+     * @codeCoverageIgnore
      */
     private function __construct()
     {

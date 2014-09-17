@@ -689,6 +689,7 @@ class File
 
     /**
      * {@inheritDoc}
+     * @codeCoverageIgnore
      */
     public function __toString()
     {

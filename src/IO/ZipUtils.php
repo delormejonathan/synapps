@@ -11,6 +11,7 @@ final class ZipUtils
 {
     /**
      * Prevents unwanted instanciations.
+     * @codeCoverageIgnore
      */
     private function __construct()
     {

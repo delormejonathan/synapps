@@ -55,6 +55,7 @@ final class Header
 
     /**
      * Private constructor prevents erroneous instanciations.
+     * @codeCoverageIgnore
      */
     private function __construct()
     {
