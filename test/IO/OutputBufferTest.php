@@ -46,12 +46,17 @@ class OutputBufferTest extends AbstractSynappsTest
      */
     public function testFlush()
     {
-        $outputBuffer = new OutputBuffer();
+        // This trash buffer catches all outputs, to prevent echoing on the standard output, and polluating reports.
+        $trashOutputBuffer = new OutputBuffer();
         try {
+            $outputBuffer = new OutputBuffer();
             echo self::CONTENT;
             $outputBuffer->flush();
         } finally {
-            $outputBuffer->close();
+            if (isset($outputBuffer)) {
+                $outputBuffer->close();
+            }
+            $trashOutputBuffer->close();
         }
 
         $hasException = false;
