@@ -51,9 +51,11 @@ class FileTest extends AbstractSynappsTest
      */
     public static function setUpBeforeClass()
     {
-        // This configuration setting is mandatory to ensure file names are correctly encoded when using special
+        // These configuration settings is mandatory to ensure file names are correctly encoded when using special
         // characters. File related functions will not manage special characters if this setting is missing.
+        // Sets the default encoding for multi-bytes functions.
         mb_internal_encoding('UTF-8');
+        mb_regex_encoding('UTF-8');
     }
 
     /**
