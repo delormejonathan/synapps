@@ -1,4 +1,5 @@
 .settings/
+docs/
 reports/
 vendor/
 .buildpath
