@@ -25,7 +25,7 @@ abstract class AbstractSynappsTest extends AbstractTest
      */
     public function setUp()
     {
-        $this->dataPath = __DIR__ . DIRECTORY_SEPARATOR . static::getRelativePathToData();
+        $this->dataPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . static::getRelativePathToData();
         $this->dataPathPrefix = $this->dataPath . DIRECTORY_SEPARATOR;
     
         // Go on with the setup

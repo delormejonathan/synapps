@@ -62,8 +62,8 @@ class ZipUtilsTest extends AbstractSynappsTest
     
         ZipUtils::extractTo($zipFile, $targetDirectory);
         $this->assertTrue($targetDirectory->exists());
-        $this->assertTrue((new File($targetDirectory->getPath() . File::DIRECTORY_SEPARATOR . self::FILE_PATH))
-            ->exists());
+        $inclosedFile = new File($targetDirectory->getPath() . File::DIRECTORY_SEPARATOR . self::FILE_PATH);
+        $this->assertTrue($inclosedFile->exists());
     }
 
     /**
