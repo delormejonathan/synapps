@@ -169,4 +169,36 @@ class StringUtilsTest extends AbstractSynappsTest
     {
         $this->assertEquals(StringUtils::EMPTY_STR, StringUtils::implodeRecursively(array()));
     }
+
+    /**
+     * Tests if null is blank.
+     */
+    public function testIsNullBlank()
+    {
+        $this->assertTrue(StringUtils::isBlank(null));
+    }
+
+    /**
+     * Tests if the empty string is blank.
+     */
+    public function testIsEmptyStringBlank()
+    {
+        $this->assertTrue(StringUtils::isBlank(StringUtils::EMPTY_STR));
+    }
+
+    /**
+     * Tests if a string containing blank characters is blank.
+     */
+    public function testIsBlankStringBlank()
+    {
+        $this->assertTrue(StringUtils::isBlank(" \t\n\r\0\x0b"));
+    }
+
+    /**
+     * Tests if a non-blank string is blank.
+     */
+    public function testIsStringBlank()
+    {
+        $this->assertFalse(StringUtils::isBlank(self::TEST_STRING));
+    }
 }

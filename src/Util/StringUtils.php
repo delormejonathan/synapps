@@ -157,4 +157,20 @@ final class StringUtils
 
         return $result;
     }
+
+    /**
+     * Tells whether a string is blank or not.
+     *
+     * A string is blank:
+     * - if it is <code>null</code>.
+     * - if it equals the empty string, after triming whitespace characters (space, tab, line feed, carriage return,
+     * NUL byte, or vertical tab).
+     *
+     * @param string $string A string.
+     * @return bool <code>true</code> if the string is blank, <code>false</code> otherwise.
+     */
+    public static function isBlank($string)
+    {
+        return (($string === null) || (is_string($string) && (trim($string) === self::EMPTY_STR)));
+    }
 }

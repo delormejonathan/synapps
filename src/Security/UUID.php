@@ -8,8 +8,14 @@ use Inneair\Synapps\System\OS;
 /**
  * This class encapsulates an immutable universally unique identifier (UUID).
  */
-class UUID
+class Uuid
 {
+    /**
+     * A pattern used to know if a string is a UUID.
+     * @var string
+     */
+    const REGEX_PATTERN = '^\p{XDigit}{8}-\p{XDigit}{4}-\p{XDigit}{4}-\p{XDigit}{4}-\p{XDigit}{12}$';
+
     /**
      * Low part of time.
      * @var string
@@ -109,7 +115,7 @@ class UUID
         $clock_seq_hi_and_reserved = $clock_seq_hi_and_reserved >> 2;
         $clock_seq_hi_and_reserved = $clock_seq_hi_and_reserved | 0x8000;
 
-        return new UUID($time_low, $time_mid, $time_hi_and_version, $clock_seq_hi_and_reserved, $node);
+        return new self($time_low, $time_mid, $time_hi_and_version, $clock_seq_hi_and_reserved, $node);
     }
 
     /**

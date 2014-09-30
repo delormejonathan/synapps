@@ -20,6 +20,8 @@ final class ZipUtils
     /**
      * Extracts the content of a Zip archive into a directory.
      *
+     * If the target directory does not exist, it will be created. 
+     *
      * @param File $zipFile Zip file.
      * @param File $targetDirectory Target directory.
      * @throws IOException If the Zip archive cannot be opened, or the content cannot be extracted.
@@ -32,7 +34,7 @@ final class ZipUtils
             throw new IOException('Cannot open ZIP archive (error ' . $result . '): ' . $zipFile->getPath());
         }
         try {
-            if (!$zipArchive->extractTo($targetDirectory->getOsPath())) {
+            if (!@$zipArchive->extractTo($targetDirectory->getOsPath())) {
                 throw new IOException('Cannot extract content of ZIP archive: ' . $zipFile->getPath());
             }
         } finally {
