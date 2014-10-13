@@ -9,7 +9,7 @@ use Inneair\Synapps\Exception\OutputBufferingException;
  * buffering. Originally, this class was needed to be able to mock such functions, which is not possible with native
  * PHP.
  */
-class OutputBuffer
+class OutputBuffer implements OutputBufferInterface
 {
     /**
      * If the output buffer is closed and unusable anymore.
@@ -47,9 +47,7 @@ class OutputBuffer
     }
 
     /**
-     * Cleans the output buffer.
-     *
-     * @throws OutputBufferingException If the output buffer is already closed.
+     * {@inheritDoc}
      */
     public function clean()
     {
@@ -58,9 +56,7 @@ class OutputBuffer
     }
 
     /**
-     * Closes the output buffer so as it cannot be used anymore.
-     *
-     * @throws OutputBufferingException If the output buffer is already closed or cannot be deleted.
+     * {@inheritDoc}
      */
     public function close()
     {
@@ -72,9 +68,7 @@ class OutputBuffer
     }
 
     /**
-     * Flushes (sends) the output buffer.
-     *
-     * @throws OutputBufferingException If the output buffer is already closed.
+     * {@inheritDoc}
      */
     public function flush()
     {
@@ -83,10 +77,7 @@ class OutputBuffer
     }
 
     /**
-     * Gets the content in the output buffer.
-     *
-     * @return string Output buffer content.
-     * @throws OutputBufferingException If the output buffer is already closed.
+     * {@inheritDoc}
      */
     public function get()
     {
@@ -99,10 +90,7 @@ class OutputBuffer
     }
 
     /**
-     * Gets the length of the content in the output buffer.
-     *
-     * @return int Number of characters.
-     * @throws OutputBufferingException If the output buffer is already closed.
+     * {@inheritDoc}
      */
     public function getLength()
     {
@@ -115,10 +103,7 @@ class OutputBuffer
     }
 
     /**
-     * Gets the level of this output buffer in the output buffers stack.
-     *
-     * @return int Level (1 for the first output buffer opened).
-     * @throws OutputBufferingException If the output buffer is already closed.
+     * {@inheritDoc}
      */
     public function getLevel()
     {
@@ -147,9 +132,7 @@ class OutputBuffer
     }
 
     /**
-     * Tells whether this output buffer is closed.
-     *
-     * @return bool <code>true</code> if this output buffer is closed, <code>false</code> otherwise.
+     * {@inheritDoc}
      */
     public function isClosed()
     {
