@@ -25,7 +25,14 @@ Syntax for changes: _`<type of modification> [domain] <description>`_
 
 `<description>` is a descriptive text of the modification. 
 
-#### 1.0.0-it1 (2014-09-14)
+#### 1.0.1 (2014-09-20)
+
+- UPG Added PHPUnit 4.2+ dependency for automated testing.
+- UPG Added phpDocumentor 2.0+ dependency.
+- IMP Added many test cases to increase confidence in released packages.
+- NEW Added Http\Method class which encapsulates HTTP methods definition.
+
+#### 1.0.0 (2014-09-15)
 
 - NEW Migration into a dedicated VCS.
 - IMP Added test suite for the File class.
