@@ -25,7 +25,7 @@ Syntax for changes: _`<type of modification> [domain] <description>`_
 
 `<description>` is a descriptive text of the modification. 
 
-#### 1.0.1 (2014-09-20)
+#### 1.0.1 (2014-10-20)
 
 - UPG Added PHPUnit 4.2+ dependency for automated testing.
 - UPG Added phpDocumentor 2.0+ dependency.
