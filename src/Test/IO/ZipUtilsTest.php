@@ -35,8 +35,8 @@ class ZipUtilsTest extends AbstractSynappsTest
     {
         parent::clean();
 
-        FileUtils::deleteFile($this->getDataPathPrefix() . self::ZIP_FILE_PATH, true);
-        FileUtils::deleteFile($this->getDataPathPrefix() . self::TARGET_DIR_PATH, true);
+        FileUtils::deleteFile($this->getDataPathPrefix() . static::ZIP_FILE_PATH, true);
+        FileUtils::deleteFile($this->getDataPathPrefix() . static::TARGET_DIR_PATH, true);
     }
 
     /**
@@ -44,8 +44,8 @@ class ZipUtilsTest extends AbstractSynappsTest
      */
     public function testExtractTo()
     {
-        $zipFile = new File($this->getDataPathPrefix() . self::ZIP_FILE_PATH);
-        $targetDirectory = new File($this->getDataPathPrefix() . self::TARGET_DIR_PATH);
+        $zipFile = new File($this->getDataPathPrefix() . static::ZIP_FILE_PATH);
+        $targetDirectory = new File($this->getDataPathPrefix() . static::TARGET_DIR_PATH);
     
         // Create a Zip archive.
         $zipArchive = new ZipArchive();
@@ -53,7 +53,7 @@ class ZipUtilsTest extends AbstractSynappsTest
             if ($zipArchive->open($zipFile->getOsPath(), ZipArchive::OVERWRITE) !== true) {
                 throw new IOException();
             }
-            if (!$zipArchive->addFromString(self::FILE_PATH, StringUtils::EMPTY_STR)) {
+            if (!$zipArchive->addFromString(static::FILE_PATH, StringUtils::EMPTY_STR)) {
                 throw new IOException();
             }
         } finally {
@@ -62,7 +62,7 @@ class ZipUtilsTest extends AbstractSynappsTest
     
         ZipUtils::extractTo($zipFile, $targetDirectory);
         $this->assertTrue($targetDirectory->exists());
-        $inclosedFile = new File($targetDirectory->getPath() . File::DIRECTORY_SEPARATOR . self::FILE_PATH);
+        $inclosedFile = new File($targetDirectory->getPath() . File::DIRECTORY_SEPARATOR . static::FILE_PATH);
         $this->assertTrue($inclosedFile->exists());
     }
 
@@ -71,8 +71,8 @@ class ZipUtilsTest extends AbstractSynappsTest
      */
     public function testExtractToUnknownDirectory()
     {
-        $zipFile = new File($this->getDataPathPrefix() . self::ZIP_FILE_PATH);
-        $targetDirectory = new File('abcd://' . $this->getDataPathPrefix() . self::TARGET_DIR_PATH);
+        $zipFile = new File($this->getDataPathPrefix() . static::ZIP_FILE_PATH);
+        $targetDirectory = new File('abcd://' . $this->getDataPathPrefix() . static::TARGET_DIR_PATH);
 
         // Create a Zip archive.
         $zipArchive = new ZipArchive();
@@ -80,7 +80,7 @@ class ZipUtilsTest extends AbstractSynappsTest
             if ($zipArchive->open($zipFile->getOsPath(), ZipArchive::OVERWRITE) !== true) {
                 throw new IOException();
             }
-            if (!$zipArchive->addFromString(self::FILE_PATH, 'test')) {
+            if (!$zipArchive->addFromString(static::FILE_PATH, 'test')) {
                 throw new IOException();
             }
         } finally {
@@ -101,8 +101,8 @@ class ZipUtilsTest extends AbstractSynappsTest
      */
     public function testExtractUnknownArchive()
     {
-        $zipFile = new File(self::ZIP_FILE_PATH);
-        $targetDirectory = new File(self::TARGET_DIR_PATH);
+        $zipFile = new File(static::ZIP_FILE_PATH);
+        $targetDirectory = new File(static::TARGET_DIR_PATH);
 
         $hasException = false;
         try {

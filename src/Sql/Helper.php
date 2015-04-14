@@ -48,6 +48,6 @@ class Helper
     {
         // We use the pattern directly instead of building the pattern with the constants in the class, for performance
         // only.
-        return mb_ereg_replace(self::LIKE_SPECIAL_CHARACTERS_PATTERN, '\\\\1', $pattern);
+        return mb_ereg_replace(static::LIKE_SPECIAL_CHARACTERS_PATTERN, '\\\\1', $pattern);
     }
 }

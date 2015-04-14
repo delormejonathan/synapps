@@ -53,8 +53,8 @@ class File
      */
     public function __construct($path)
     {
-        $this->path = self::normalizePath($path);
-        $this->osPath = self::encodeOsFileName($this->path);
+        $this->path = static::normalizePath($path);
+        $this->osPath = static::encodeOsFileName($this->path);
     }
 
     /**
@@ -73,8 +73,8 @@ class File
      */
     public function copy($destination)
     {
-        $destinationFile = ($destination instanceof self) ? $destination : new self($destination);
-        $parentFile = new self($destinationFile->getParentPath());
+        $destinationFile = ($destination instanceof static) ? $destination : new static($destination);
+        $parentFile = new static($destinationFile->getParentPath());
         if (!$parentFile->exists()) {
             throw new FileNotFoundException($parentFile->getPath());
         }
@@ -92,9 +92,9 @@ class File
             try {
                 while ($innerOsFilename !== false) {
                     if (($innerOsFilename !== '.') && ($innerOsFilename !== '..')) {
-                        $innerFilename = self::decodeOsFileName($innerOsFilename);
-                        $innerFile = new self($this->path . self::DIRECTORY_SEPARATOR . $innerFilename);
-                        $innerFile->copy($destinationFile->getPath() . self::DIRECTORY_SEPARATOR . $innerFilename);
+                        $innerFilename = static::decodeOsFileName($innerOsFilename);
+                        $innerFile = new static($this->path . static::DIRECTORY_SEPARATOR . $innerFilename);
+                        $innerFile->copy($destinationFile->getPath() . static::DIRECTORY_SEPARATOR . $innerFilename);
                     }
 
                     $innerOsFilename = $directory->read();
@@ -167,7 +167,7 @@ class File
      */
     public function createSymbolicLink($target)
     {
-        $targetFile = ($target instanceof self) ? $target : new self($target);
+        $targetFile = ($target instanceof static) ? $target : new static($target);
         if (!$targetFile->exists()) {
             throw new FileNotFoundException($targetFile->getPath());
         }
@@ -195,7 +195,7 @@ class File
     {
         $os = OS::getInstance();
         if ($os->isWindows()) {
-            return mb_convert_encoding($fileName, 'UTF-8', self::WINDOWS_FS_ENCODING);
+            return mb_convert_encoding($fileName, 'UTF-8', static::WINDOWS_FS_ENCODING);
         } elseif ($os->isMacintosh()) {
             return Normalizer::normalize($fileName, Normalizer::FORM_C);
         } else {
@@ -228,8 +228,8 @@ class File
                 try {
                     while ($innerOsFilename !== false) {
                         if (($innerOsFilename !== '.') && ($innerOsFilename !== '..')) {
-                            $innerFile = new self(
-                                $this->path . self::DIRECTORY_SEPARATOR . self::decodeOsFileName($innerOsFilename)
+                            $innerFile = new static(
+                                $this->path . static::DIRECTORY_SEPARATOR . static::decodeOsFileName($innerOsFilename)
                             );
                             $innerFile->delete($recursive);
                         }
@@ -313,7 +313,7 @@ class File
     {
         $os = OS::getInstance();
         if ($os->isWindows()) {
-            return mb_convert_encoding($fileName, self::WINDOWS_FS_ENCODING);
+            return mb_convert_encoding($fileName, static::WINDOWS_FS_ENCODING);
         } elseif ($os->isMacintosh()) {
             return Normalizer::normalize($fileName, Normalizer::FORM_D);
         } else {
@@ -447,7 +447,7 @@ class File
             throw new FileNotFoundException($this->path);
         }
 
-        return self::normalizePath($realPath);
+        return static::normalizePath($realPath);
     }
 
     /**
@@ -531,11 +531,11 @@ class File
             $innerOsFilename = $directory->read();
             $useFilter = ($pattern !== null);
             while ($innerOsFilename !== false) {
-                $innerFilename = self::decodeOsFileName($innerOsFilename);
+                $innerFilename = static::decodeOsFileName($innerOsFilename);
                 if (($innerOsFilename !== '.') && ($innerOsFilename !== '..')) {
                     $result = ($useFilter) ? mb_ereg_match($pattern, $innerFilename) : true;
                     if ($result) {
-                        $paths[] = $this->path . self::DIRECTORY_SEPARATOR . $innerFilename;
+                        $paths[] = $this->path . static::DIRECTORY_SEPARATOR . $innerFilename;
                     }
                 }
 
@@ -568,8 +568,9 @@ class File
         $path = rtrim($path, '/\\');
         if ($normalizeSeparators) {
             $searchedDirectorySeparator =
-                ($usePortableDirectorySeparator ? DIRECTORY_SEPARATOR : self::DIRECTORY_SEPARATOR);
-            $newDirectorySeparator = ($usePortableDirectorySeparator) ? self::DIRECTORY_SEPARATOR : DIRECTORY_SEPARATOR;
+                ($usePortableDirectorySeparator ? DIRECTORY_SEPARATOR : static::DIRECTORY_SEPARATOR);
+            $newDirectorySeparator = ($usePortableDirectorySeparator)
+                ? static::DIRECTORY_SEPARATOR : DIRECTORY_SEPARATOR;
             $pattern = str_replace('\\', '\\\\', $searchedDirectorySeparator);
             $result = mb_ereg_replace($pattern, $newDirectorySeparator, $path);
             if ($result !== false) {
@@ -606,7 +607,7 @@ class File
      */
     public function rename($destination)
     {
-        $destinationFile = ($destination instanceof self) ? $destination : new self($destination);
+        $destinationFile = ($destination instanceof static) ? $destination : new static($destination);
         // Renaming with a case change is enabled, otherwise the destination file must not already exist.
         if ((mb_strtolower($this->getPath()) !== mb_strtolower($destinationFile->getPath()))
             && $destinationFile->exists()
@@ -688,7 +689,6 @@ class File
     }
 
     /**
-     * {@inheritDoc}
      * @codeCoverageIgnore
      */
     public function __toString()

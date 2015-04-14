@@ -65,13 +65,28 @@ class FileTest extends AbstractSynappsTest
     {
         parent::clean();
 
-         FileUtils::deleteFile($this->getDataPathPrefix() . self::FILE_NAME_1, true);
-         FileUtils::deleteFile($this->getDataPathPrefix() . mb_strtoupper(self::FILE_NAME_1), true);
-         FileUtils::deleteFile($this->getDataPathPrefix() . self::FILE_NAME_2, true);
-         FileUtils::deleteFile(
-            $this->getDataPathPrefix() . self::EXISTING_DIRECTORY_1 . File::DIRECTORY_SEPARATOR . self::FILE_NAME_1,
+        FileUtils::deleteFile($this->getDataPathPrefix() . static::FILE_NAME_1, true);
+        FileUtils::deleteFile($this->getDataPathPrefix() . mb_strtoupper(static::FILE_NAME_1), true);
+        FileUtils::deleteFile($this->getDataPathPrefix() . static::FILE_NAME_2, true);
+        FileUtils::deleteFile(
+            $this->getDataPathPrefix() . static::EXISTING_DIRECTORY_1 . File::DIRECTORY_SEPARATOR . static::FILE_NAME_1,
             true
-         );
+        );
+    }
+
+    /**
+     * Checks methods to get extension, name, filename.
+     */
+    public function testFileInfo()
+    {
+        $filename = 'toto';
+        $extension = 'txt';
+        $name = $filename . '.' . $extension;
+        $file = new File($this->getDataPathPrefix() . $name);
+
+        $this->assertSame($extension, $file->getExtension());
+        $this->assertSame($name, $file->getName());
+        $this->assertSame($filename, $file->getFilename());
     }
 
     /**
@@ -80,9 +95,9 @@ class FileTest extends AbstractSynappsTest
     public function testCopyDirectory()
     {
         // Copies a directory into a missing parent directory.
-        $srcFile = new File($this->getDataPathPrefix() . self::EXISTING_DIRECTORY_1);
+        $srcFile = new File($this->getDataPathPrefix() . static::EXISTING_DIRECTORY_1);
         $destFile = new File(
-            $this->getDataPathPrefix() . self::FILE_NAME_1 . File::DIRECTORY_SEPARATOR . self::FILE_NAME_1
+            $this->getDataPathPrefix() . static::FILE_NAME_1 . File::DIRECTORY_SEPARATOR . static::FILE_NAME_1
         );
         $hasException = false;
         try {
@@ -105,7 +120,7 @@ class FileTest extends AbstractSynappsTest
         $this->assertException($hasException);
 
         // Copies a directory.
-        $destFile = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
+        $destFile = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
         $srcFile->copy($destFile);
         $this->assertContentEquals($srcFile, $destFile);
     }
@@ -116,8 +131,8 @@ class FileTest extends AbstractSynappsTest
     public function testCopyFile()
     {
         // Copies a missing file.
-        $srcFile = new File($this->getDataPathPrefix() . self::MISSING_FILENAME);
-        $destFile = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
+        $srcFile = new File($this->getDataPathPrefix() . static::MISSING_FILENAME);
+        $destFile = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
         $hasException = false;
         try {
             $srcFile->copy($destFile);
@@ -128,9 +143,9 @@ class FileTest extends AbstractSynappsTest
         $this->assertException($hasException);
 
         // Copies a file into a missing parent directory.
-        $srcFile = new File($this->getDataPathPrefix() . self::EXISTING_FILENAME);
+        $srcFile = new File($this->getDataPathPrefix() . static::EXISTING_FILENAME);
         $destFile = new File(
-            $this->getDataPathPrefix() . self::FILE_NAME_1 . File::DIRECTORY_SEPARATOR . self::FILE_NAME_1
+            $this->getDataPathPrefix() . static::FILE_NAME_1 . File::DIRECTORY_SEPARATOR . static::FILE_NAME_1
         );
         $hasException = false;
         try {
@@ -153,7 +168,7 @@ class FileTest extends AbstractSynappsTest
         $this->assertException($hasException);
 
         // Copies a file into a file with a name used by an existing directory.
-        $destFile = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
+        $destFile = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
         $destFile->createDirectory();
         $hasException = false;
         try {
@@ -175,7 +190,7 @@ class FileTest extends AbstractSynappsTest
     public function testCreateDirectory()
     {
         // Creates a directory with a name already used by a file.
-        $file = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
+        $file = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
         $hasException = false;
         $file->create();
         try {
@@ -187,7 +202,7 @@ class FileTest extends AbstractSynappsTest
         $file->delete();
 
         $file = new File(
-            $this->getDataPathPrefix() . self::FILE_NAME_1 . File::DIRECTORY_SEPARATOR . self::FILE_NAME_1
+            $this->getDataPathPrefix() . static::FILE_NAME_1 . File::DIRECTORY_SEPARATOR . static::FILE_NAME_1
         );
         $this->assertFalse(is_dir($file->getOsPath()));
         $this->assertFalse($file->isDirectory());
@@ -218,7 +233,7 @@ class FileTest extends AbstractSynappsTest
     public function testCreateFile()
     {
         // Creates a file with a name already used by a directory.
-        $file = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
+        $file = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
         $hasException = false;
         $file->createDirectory();
         try {
@@ -229,7 +244,9 @@ class FileTest extends AbstractSynappsTest
         $this->assertException($hasException);
         $file->delete();
 
-        $file = new File($this->getDataPathPrefix() . self::FILE_NAME_1 . File::DIRECTORY_SEPARATOR . self::FILE_NAME_1);
+        $file = new File(
+            $this->getDataPathPrefix() . static::FILE_NAME_1 . File::DIRECTORY_SEPARATOR . static::FILE_NAME_1
+        );
         $this->assertFalse(is_file($file->getOsPath()));
         $this->assertFalse($file->isFile());
 
@@ -243,7 +260,7 @@ class FileTest extends AbstractSynappsTest
         $this->assertException($hasException);
 
         // Creates a directory
-        $directory = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
+        $directory = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
         $directory->createDirectory();
         // Creates a file in the previous directory
         $file->create();
@@ -266,7 +283,7 @@ class FileTest extends AbstractSynappsTest
     public function testCreateSymbolicLink()
     {
         // Creates a symbolic link with a name already used by a file.
-        $file = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
+        $file = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
         $hasException = false;
         $file->create();
         try {
@@ -279,7 +296,7 @@ class FileTest extends AbstractSynappsTest
 
         // Creates a symbolic link in a missing directory to an existing directory.
         $link = new File(
-            $this->getDataPathPrefix() . self::FILE_NAME_1 . File::DIRECTORY_SEPARATOR . self::FILE_NAME_1
+            $this->getDataPathPrefix() . static::FILE_NAME_1 . File::DIRECTORY_SEPARATOR . static::FILE_NAME_1
         );
         $this->assertFalse(is_link($link->getOsPath()));
         $this->assertFalse($link->isSymbolicLink());
@@ -292,11 +309,12 @@ class FileTest extends AbstractSynappsTest
         $this->assertException($hasException);
 
         // Creates a symbolic link on a missing file/directory.
-        $link = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
+        $link = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
         $hasException = false;
         try {
             $link->createSymbolicLink(
-                $this->getDataPathPrefix() . self::EXISTING_DIRECTORY_1 . File::DIRECTORY_SEPARATOR . self::FILE_NAME_1
+                $this->getDataPathPrefix() . static::EXISTING_DIRECTORY_1 . File::DIRECTORY_SEPARATOR
+                . static::FILE_NAME_1
             );
         } catch (FileNotFoundException $e) {
             $hasException = true;
@@ -305,7 +323,7 @@ class FileTest extends AbstractSynappsTest
 
         // Creates a symbolic link on an existing directory.
         $directory = new File(
-            $this->getDataPathPrefix() . self::EXISTING_DIRECTORY_1 . File::DIRECTORY_SEPARATOR . self::FILE_NAME_1
+            $this->getDataPathPrefix() . static::EXISTING_DIRECTORY_1 . File::DIRECTORY_SEPARATOR . static::FILE_NAME_1
         );
         $directory->createDirectory();
         $link->createSymbolicLink($directory);
@@ -330,7 +348,7 @@ class FileTest extends AbstractSynappsTest
     public function testDelete()
     {
         // Deletes a missing file.
-        $file = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
+        $file = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
         $this->assertFalse($file->delete());
 
         // Deletes an existing file.
@@ -339,7 +357,7 @@ class FileTest extends AbstractSynappsTest
 
         // Deletes a symbolic link to a file.
         $target = new File(
-            $this->getDataPathPrefix() . self::EXISTING_DIRECTORY_1 . File::DIRECTORY_SEPARATOR . self::FILE_NAME_1
+            $this->getDataPathPrefix() . static::EXISTING_DIRECTORY_1 . File::DIRECTORY_SEPARATOR . static::FILE_NAME_1
         );
         $target->create();
         $file->createSymbolicLink($target);
@@ -365,8 +383,8 @@ class FileTest extends AbstractSynappsTest
         $this->assertDelete($file);
 
         // Deletes a non-empty directory (non-recursive).
-        $file = new File($this->getDataPathPrefix() . self::EXISTING_DIRECTORY_1);
-        $dest = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
+        $file = new File($this->getDataPathPrefix() . static::EXISTING_DIRECTORY_1);
+        $dest = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
         $file->copy($dest);
         $hasException = false;
         try {
@@ -389,7 +407,7 @@ class FileTest extends AbstractSynappsTest
         // Reads content of a missing file.
         $hasException = false;
         try {
-            $missingFile = new File($this->getDataPathPrefix() . self::MISSING_FILENAME);
+            $missingFile = new File($this->getDataPathPrefix() . static::MISSING_FILENAME);
             $missingFile->getContent();
         } catch (IOException $e) {
             $hasException = true;
@@ -397,11 +415,11 @@ class FileTest extends AbstractSynappsTest
         $this->assertException($hasException);
 
         $originalContent = file_get_contents(
-            File::encodeOsFileName($this->getDataPathPrefix() . self::EXISTING_FILENAME)
+            File::encodeOsFileName($this->getDataPathPrefix() . static::EXISTING_FILENAME)
         );
 
         // Reads content of an existing file.
-        $existingFile = new File($this->getDataPathPrefix() . self::EXISTING_FILENAME);
+        $existingFile = new File($this->getDataPathPrefix() . static::EXISTING_FILENAME);
         $content = $existingFile->getContent();
         $this->assertNotNull($content);
         $this->assertEquals($originalContent, $content);
@@ -415,7 +433,7 @@ class FileTest extends AbstractSynappsTest
         // Gets size of a missing file.
         $hasException = false;
         try {
-            $missingFile = new File($this->getDataPathPrefix() . self::MISSING_FILENAME);
+            $missingFile = new File($this->getDataPathPrefix() . static::MISSING_FILENAME);
             $missingFile->getSize();
         } catch (IOException $e) {
             $hasException = true;
@@ -423,12 +441,12 @@ class FileTest extends AbstractSynappsTest
         $this->assertException($hasException);
 
         // Creates a file with an empty content.
-        $file = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
+        $file = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
         $file->create();
         $this->assertEquals(0, $file->getSize());
 
         // Checks size of an existing file
-        $file = new File($this->getDataPathPrefix() . self::EXISTING_FILENAME);
+        $file = new File($this->getDataPathPrefix() . static::EXISTING_FILENAME);
         $content = $file->getContent();
         $this->assertEquals(mb_strlen($content), $file->getSize());
     }
@@ -441,7 +459,7 @@ class FileTest extends AbstractSynappsTest
         // Gets real path of a missing file.
         $hasException = false;
         try {
-            $missingFile = new File($this->getDataPathPrefix() . self::MISSING_FILENAME);
+            $missingFile = new File($this->getDataPathPrefix() . static::MISSING_FILENAME);
             $missingFile->getRealPath();
         } catch (FileNotFoundException $e) {
             $hasException = true;
@@ -449,10 +467,10 @@ class FileTest extends AbstractSynappsTest
         $this->assertException($hasException);
 
         // Creates a symbolic link, and get its real path.
-        $link = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
+        $link = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
         $target = new File(
-            $this->getDataPathPrefix() . self::EXISTING_DIRECTORY_1 . File::DIRECTORY_SEPARATOR
-                . self::EXISTING_DIRECTORY_2
+            $this->getDataPathPrefix() . static::EXISTING_DIRECTORY_1 . File::DIRECTORY_SEPARATOR
+            . static::EXISTING_DIRECTORY_2
         );
         $link->createSymbolicLink($target);
         $this->assertEquals(File::normalizePath(realpath($target->getOsPath())), $link->getRealPath());
@@ -464,8 +482,8 @@ class FileTest extends AbstractSynappsTest
     public function testRename()
     {
         // Renames a missing file.
-        $srcFile = new File($this->getDataPathPrefix() . self::MISSING_FILENAME);
-        $destFile = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
+        $srcFile = new File($this->getDataPathPrefix() . static::MISSING_FILENAME);
+        $destFile = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
         $hasException = false;
         try {
             $srcFile->rename($destFile);
@@ -475,9 +493,9 @@ class FileTest extends AbstractSynappsTest
         $this->assertTrue($hasException);
 
         // Renames a file into a missing parent directory.
-        $srcFile = new File($this->getDataPathPrefix() . self::EXISTING_FILENAME);
+        $srcFile = new File($this->getDataPathPrefix() . static::EXISTING_FILENAME);
         $destFile = new File(
-            $this->getDataPathPrefix() . self::FILE_NAME_1 . File::DIRECTORY_SEPARATOR . self::FILE_NAME_1
+            $this->getDataPathPrefix() . static::FILE_NAME_1 . File::DIRECTORY_SEPARATOR . static::FILE_NAME_1
         );
         $hasException = false;
         try {
@@ -488,8 +506,8 @@ class FileTest extends AbstractSynappsTest
         $this->assertTrue($hasException);
 
         // Renames a file (case change only).
-        $srcFile = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
-        FileUtils::copyFile($this->getDataPathPrefix() . self::EXISTING_FILENAME, $srcFile);
+        $srcFile = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
+        FileUtils::copyFile($this->getDataPathPrefix() . static::EXISTING_FILENAME, $srcFile);
         $destFile = new File(
             $srcFile->getParentPath() . File::DIRECTORY_SEPARATOR . mb_strtoupper($srcFile->getName())
         );
@@ -498,14 +516,14 @@ class FileTest extends AbstractSynappsTest
         $destFile->delete();
 
         // Renames a file.
-        FileUtils::copyFile($this->getDataPathPrefix() . self::EXISTING_FILENAME, $srcFile);
-        $destFile = new File($this->getDataPathPrefix() . self::FILE_NAME_2);
+        FileUtils::copyFile($this->getDataPathPrefix() . static::EXISTING_FILENAME, $srcFile);
+        $destFile = new File($this->getDataPathPrefix() . static::FILE_NAME_2);
         $srcFile->rename($destFile);
         $this->assertFalse($srcFile->exists());
         $this->assertTrue($destFile->exists());
 
         // Renames (and overwrites) a file.
-        FileUtils::copyFile($this->getDataPathPrefix() . self::EXISTING_FILENAME, $srcFile);
+        FileUtils::copyFile($this->getDataPathPrefix() . static::EXISTING_FILENAME, $srcFile);
         $hasException = false;
         try {
             $srcFile->rename($destFile);
@@ -517,10 +535,10 @@ class FileTest extends AbstractSynappsTest
         // Renames a non-empty directory.
         $srcFile->delete();
         $destFile->delete();
-        $srcFile = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
-        $sourceDirectory = new File($this->getDataPathPrefix() . self::EXISTING_DIRECTORY_1);
+        $srcFile = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
+        $sourceDirectory = new File($this->getDataPathPrefix() . static::EXISTING_DIRECTORY_1);
         $sourceDirectory->copy($srcFile);
-        $destFile = new File($this->getDataPathPrefix() . self::FILE_NAME_2);
+        $destFile = new File($this->getDataPathPrefix() . static::FILE_NAME_2);
         $srcFile->rename($destFile);
         $this->assertFalse($srcFile->exists());
         $this->assertTrue($destFile->exists());
@@ -528,7 +546,7 @@ class FileTest extends AbstractSynappsTest
 
         // Renames a non-empty directory (case change only).
         $destFile->delete(true);
-        $srcFile = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
+        $srcFile = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
         $sourceDirectory->copy($srcFile);
         $destFile = new File(
             $srcFile->getParentPath() . File::DIRECTORY_SEPARATOR . mb_strtoupper($srcFile->getName())
@@ -536,6 +554,15 @@ class FileTest extends AbstractSynappsTest
         $srcFile->rename($destFile);
         $this->assertTrue($destFile->exists());
         $this->assertContentEquals($sourceDirectory, $destFile);
+
+        // Renames a file (using FileUtils)
+        $destFile->delete(true);
+        $destFile = new File($this->getDataPathPrefix() . static::FILE_NAME_2);
+        FileUtils::renameFile($this->getDataPathPrefix() . static::EXISTING_FILENAME, $destFile);
+        $this->assertFalse($srcFile->exists());
+        $this->assertTrue($destFile->exists());
+        $destFile = new File($this->getDataPathPrefix() . static::EXISTING_FILENAME);
+        FileUtils::renameFile($this->getDataPathPrefix() . static::FILE_NAME_2, $destFile);
     }
 
     /**
@@ -546,7 +573,7 @@ class FileTest extends AbstractSynappsTest
         // Touch a missing file.
         $hasException = false;
         try {
-            $missingFile = new File($this->getDataPathPrefix() . self::MISSING_FILENAME);
+            $missingFile = new File($this->getDataPathPrefix() . static::MISSING_FILENAME);
             $missingFile->touch();
         } catch (FileNotFoundException $e) {
             $hasException = true;
@@ -556,7 +583,7 @@ class FileTest extends AbstractSynappsTest
         // Gets last modified date of a missing file.
         $hasException = false;
         try {
-            $missingFile = new File($this->getDataPathPrefix() . self::MISSING_FILENAME);
+            $missingFile = new File($this->getDataPathPrefix() . static::MISSING_FILENAME);
             $missingFile->getLastModifiedDate();
         } catch (IOException $e) {
             $hasException = true;
@@ -566,7 +593,7 @@ class FileTest extends AbstractSynappsTest
         // Creates a file and gets its last modified date.
         $currentDate = new DateTime();
         $this->assertEquals(0, sleep(1));
-        $file = new File($this->getDataPathPrefix() . self::FILE_NAME_1);
+        $file = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
         $file->create();
         $dateCreated = $file->getLastModifiedDate();
         $this->assertGreaterThan($currentDate->getTimestamp(), $dateCreated->getTimestamp());
@@ -575,6 +602,49 @@ class FileTest extends AbstractSynappsTest
         $this->assertEquals(0, sleep(1));
         $file->touch();
         $this->assertGreaterThan($dateCreated->getTimestamp(), $file->getLastModifiedDate()->getTimestamp());
+    }
+
+    /**
+     * Checks the method to set content of a file
+     */
+    public function testFileContent()
+    {
+        $content = static::FILE_NAME_2;
+
+        // Create a file and set content.
+        $file1 = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
+        try {
+            $file1->setContent($content);
+            $this->assertEquals($content, $file1->getContent());
+        } finally {
+            $file1->delete();
+        }
+
+        // Set content on directory.
+        $file2 = new File($this->getDataPathPrefix() . static::EXISTING_DIRECTORY_1);
+        $hasException = false;
+        try {
+            $file2->setContent($content);
+        } catch (IOException $e) {
+            $hasException = true;
+        }
+        $this->assertTrue($hasException);
+    }
+
+    /**
+     * Checks the method to list content of a directory.
+     */
+    public function testListPaths()
+    {
+        // List content on a file
+        $file1 = new File($this->getDataPathPrefix() . static::EXISTING_FILENAME);
+        $hasException = false;
+        try {
+            $file1->listFilePaths();
+        } catch (IOException $e) {
+            $hasException = true;
+        }
+        $this->assertTrue($hasException);
     }
 
     /**

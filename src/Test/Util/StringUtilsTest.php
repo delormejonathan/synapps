@@ -21,7 +21,7 @@ class StringUtilsTest extends AbstractSynappsTest
      */
     public function testCompareDifferentStrings()
     {
-        $this->assertFalse(StringUtils::equals(self::TEST_STRING, mb_strtoupper(self::TEST_STRING)));
+        $this->assertFalse(StringUtils::equals(static::TEST_STRING, mb_strtoupper(static::TEST_STRING)));
     }
 
     /**
@@ -29,7 +29,7 @@ class StringUtilsTest extends AbstractSynappsTest
      */
     public function testCompareStringsIgnoreCase()
     {
-        $this->assertTrue(StringUtils::equals(self::TEST_STRING, mb_strtoupper(self::TEST_STRING), true));
+        $this->assertTrue(StringUtils::equals(static::TEST_STRING, mb_strtoupper(static::TEST_STRING), true));
     }
 
     /**
@@ -37,7 +37,7 @@ class StringUtilsTest extends AbstractSynappsTest
      */
     public function testCompareSameStrings()
     {
-        $this->assertTrue(StringUtils::equals(self::TEST_STRING, self::TEST_STRING));
+        $this->assertTrue(StringUtils::equals(static::TEST_STRING, static::TEST_STRING));
     }
 
     /**
@@ -57,8 +57,8 @@ class StringUtilsTest extends AbstractSynappsTest
     public function testDefaultStringForArrayWithQuotes()
     {
         $this->assertEquals(
-            self::TEST_STRING . self::TEST_STRING,
-            StringUtils::defaultString(array(), StringUtils::NULL_STR, self::TEST_STRING)
+            static::TEST_STRING . static::TEST_STRING,
+            StringUtils::defaultString(array(), StringUtils::NULL_STR, static::TEST_STRING)
         );
     }
 
@@ -84,8 +84,8 @@ class StringUtilsTest extends AbstractSynappsTest
     public function testDefaultStringForString()
     {
         $this->assertEquals(
-            StringUtils::QUOTE . self::TEST_STRING . StringUtils::QUOTE,
-            StringUtils::defaultString(self::TEST_STRING)
+            StringUtils::QUOTE . static::TEST_STRING . StringUtils::QUOTE,
+            StringUtils::defaultString(static::TEST_STRING)
         );
     }
 
@@ -95,8 +95,8 @@ class StringUtilsTest extends AbstractSynappsTest
     public function testDefaultStringForStringWithQuotes()
     {
         $this->assertEquals(
-            self::TEST_STRING . self::TEST_STRING . self::TEST_STRING,
-            StringUtils::defaultString(self::TEST_STRING, StringUtils::NULL_STR, self::TEST_STRING)
+            static::TEST_STRING . static::TEST_STRING . static::TEST_STRING,
+            StringUtils::defaultString(static::TEST_STRING, StringUtils::NULL_STR, static::TEST_STRING)
         );
     }
 
@@ -106,10 +106,10 @@ class StringUtilsTest extends AbstractSynappsTest
     public function testImplodeArrayWithGlue()
     {
         $this->assertEquals(
-            StringUtils::QUOTE . self::TEST_STRING . StringUtils::QUOTE . StringUtils::ARRAY_VALUES_SEPARATOR
-                . StringUtils::QUOTE . self::TEST_STRING . StringUtils::QUOTE,
+            StringUtils::QUOTE . static::TEST_STRING . StringUtils::QUOTE . StringUtils::ARRAY_VALUES_SEPARATOR
+                . StringUtils::QUOTE . static::TEST_STRING . StringUtils::QUOTE,
             StringUtils::implodeRecursively(
-                array(self::TEST_STRING, self::TEST_STRING),
+                array(static::TEST_STRING, static::TEST_STRING),
                 StringUtils::ARRAY_VALUES_SEPARATOR
             )
         );
@@ -143,10 +143,10 @@ class StringUtilsTest extends AbstractSynappsTest
     public function testImplodeArrayWithKeys()
     {
         $this->assertEquals(
-            StringUtils::QUOTE . self::TEST_STRING . StringUtils::QUOTE . '=' . StringUtils::QUOTE . self::TEST_STRING
+            StringUtils::QUOTE . static::TEST_STRING . StringUtils::QUOTE . '=' . StringUtils::QUOTE . static::TEST_STRING
                 . StringUtils::QUOTE,
             StringUtils::implodeRecursively(
-                array(self::TEST_STRING => self::TEST_STRING),
+                array(static::TEST_STRING => static::TEST_STRING),
                 StringUtils::EMPTY_STR,
                 null,
                 true
@@ -199,6 +199,6 @@ class StringUtilsTest extends AbstractSynappsTest
      */
     public function testIsStringBlank()
     {
-        $this->assertFalse(StringUtils::isBlank(self::TEST_STRING));
+        $this->assertFalse(StringUtils::isBlank(static::TEST_STRING));
     }
 }

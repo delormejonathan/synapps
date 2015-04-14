@@ -24,9 +24,9 @@ class FileNotFoundExceptionTest extends AbstractSynappsTest
         $hasException = false;
         try
         {
-            throw new FileNotFoundException(self::FILE_PATH);
+            throw new FileNotFoundException(static::FILE_PATH);
         } catch (FileNotFoundException $e) {
-            $this->assertEquals(self::FILE_PATH, $e->getFilePath());
+            $this->assertEquals(static::FILE_PATH, $e->getFilePath());
             $hasException = true;
         }
         $this->assertException($hasException);

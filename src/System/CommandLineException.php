@@ -13,7 +13,7 @@ class CommandLineException extends RuntimeException
     /**
      * Creates an exception based on the given parameters.
      *
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param string $message Exception message (defaults to <code>null</code>).
      * @param Exception $previous Parent exception (defaults to <code>null</code>).

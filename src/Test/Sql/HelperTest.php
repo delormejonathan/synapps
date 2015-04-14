@@ -29,7 +29,7 @@ class HelperTest extends AbstractSynappsTest
      */
     public function testEscapeValidPattern()
     {
-        $this->assertEquals(self::PATTERN, Helper::escapeLikePattern(self::PATTERN));
+        $this->assertEquals(static::PATTERN, Helper::escapeLikePattern(static::PATTERN));
     }
 
     /**

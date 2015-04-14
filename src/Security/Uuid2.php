@@ -3,12 +3,11 @@
 namespace Inneair\Synapps\Security;
 
 use Exception;
-use Inneair\Synapps\System\OS;
 
 /**
  * This class encapsulates an immutable universally unique identifier (UUID).
  */
-class Uuid
+class UUID
 {
     /**
      * A pattern used to know if a string is a UUID.
@@ -75,18 +74,20 @@ class Uuid
     {
         $pr_bits = null;
         $fp = false;
-        if (OS::getInstance()->isWindows()) {
-            // If /dev/urandom isn't available (eg: in non-unix systems), use mt_rand().
-            $pr_bits = "";
-            for ($cnt = 0; $cnt < 16; $cnt++) {
-                $pr_bits .= chr(mt_rand(0, 255));
-            }
-        } else {
-            try {
-                $fp = @fopen('/dev/urandom', 'rb');
-                $pr_bits .= @fread($fp, 16);
-            } finally {
+        try {
+            $fp = @fopen('/dev/urandom', 'rb');
+            $pr_bits .= @fread($fp, 16);
+            @fclose($fp);
+        } catch (Exception $e) {
+            if ($fp === false) {
+                // If /dev/urandom isn't available (eg: in non-unix systems), use mt_rand().
+                $pr_bits = '';
+                for ($cnt = 0; $cnt < 16; $cnt++) {
+                    $pr_bits .= chr(mt_rand(0, 255));
+                }
+            } else {
                 @fclose($fp);
+                throw $e;
             }
         }
 
@@ -115,11 +116,11 @@ class Uuid
         $clock_seq_hi_and_reserved = $clock_seq_hi_and_reserved >> 2;
         $clock_seq_hi_and_reserved = $clock_seq_hi_and_reserved | 0x8000;
 
-        return new self($time_low, $time_mid, $time_hi_and_version, $clock_seq_hi_and_reserved, $node);
+        return new static($time_low, $time_mid, $time_hi_and_version, $clock_seq_hi_and_reserved, $node);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @return string String representation of this UUID, made up of 32 hex digits and 4 hyphens:
      * <time_low> '-' <time_mid> '-' <time_high_and_version> '-' <variant_and_sequence> '-' <node>

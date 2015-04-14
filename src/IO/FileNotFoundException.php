@@ -16,7 +16,7 @@ class FileNotFoundException extends IOException
     /**
      * Creates an exception based on the given parameters.
      *
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param string $filePath File path.
      * @param string $previous Parent exception (defaults to <code>null</code>).

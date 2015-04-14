@@ -24,8 +24,8 @@ class OutputBufferTest extends AbstractSynappsTest
     {
         $outputBuffer = new OutputBuffer();
         try {
-            echo self::CONTENT;
-            $this->assertEquals(self::CONTENT, $outputBuffer->get());
+            echo static::CONTENT;
+            $this->assertEquals(static::CONTENT, $outputBuffer->get());
             $outputBuffer->clean();
             $this->assertEmpty($outputBuffer->get());
         } finally {
@@ -50,7 +50,7 @@ class OutputBufferTest extends AbstractSynappsTest
         $trashOutputBuffer = new OutputBuffer();
         try {
             $outputBuffer = new OutputBuffer();
-            echo self::CONTENT;
+            echo static::CONTENT;
             $outputBuffer->flush();
         } finally {
             if (isset($outputBuffer)) {
@@ -76,8 +76,8 @@ class OutputBufferTest extends AbstractSynappsTest
         $rootOutputBuffer = new OutputBuffer();
         try {
             $childOutputBuffer = new OutputBuffer();
-            echo self::CONTENT;
-            $this->assertEquals(self::CONTENT, $childOutputBuffer->get());
+            echo static::CONTENT;
+            $this->assertEquals(static::CONTENT, $childOutputBuffer->get());
         } finally {
             if (isset($childOutputBuffer)) {
                 $childOutputBuffer->close();
@@ -95,8 +95,8 @@ class OutputBufferTest extends AbstractSynappsTest
         $outputBuffer = new OutputBuffer();
         try {
             $this->assertEquals(0, $outputBuffer->getLength());
-            echo self::CONTENT;
-            $this->assertEquals(mb_strlen(self::CONTENT), $outputBuffer->getLength());
+            echo static::CONTENT;
+            $this->assertEquals(mb_strlen(static::CONTENT), $outputBuffer->getLength());
         } finally {
             $outputBuffer->close();
         }

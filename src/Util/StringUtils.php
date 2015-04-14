@@ -91,18 +91,18 @@ final class StringUtils
             $result = $defaultVar;
         } elseif (is_string($var)) {
             if ($quote === null) {
-                $quote = self::QUOTE;
+                $quote = static::QUOTE;
             }
             $result = $quote . $var . $quote;
         } elseif (is_array($var)) {
             if ($quote === null) {
-                $quoteStart = self::OPEN_SQUARE_BRACKET;
-                $quoteEnd = self::CLOSE_SQUARE_BRACKET;
+                $quoteStart = static::OPEN_SQUARE_BRACKET;
+                $quoteEnd = static::CLOSE_SQUARE_BRACKET;
             } else {
                 $quoteStart = $quote;
                 $quoteEnd = $quote;
             }
-            $result = $quoteStart . self::implodeRecursively($var, self::ARRAY_VALUES_SEPARATOR, $quote, true)
+            $result = $quoteStart . static::implodeRecursively($var, static::ARRAY_VALUES_SEPARATOR, $quote, true)
                 . $quoteEnd;
         } else {
             $result = $var;
@@ -117,7 +117,7 @@ final class StringUtils
      * This method is a 'recursive' version of the PHP 'implode' method, with keys dump capability, and data types
      * management. When an inner array is found, it is imploded too, and its values can be enclosed between a
      * <code>quote</code> value. This method concats all values with the glue. When keys are shown, values are prefixed
-     * with the key and the equal sign. If <code>quote</code> is ommitted, square brackets are used for inner arrays.
+     * with the key and the equal sign. If <code>quote</code> is omitted, square brackets are used for inner arrays.
      *
      * @param array $pieces See {@link implode}.
      * @param string $glue See {@link implode}.
@@ -139,19 +139,19 @@ final class StringUtils
             }
 
             if ($showKeys) {
-                $result .= self::defaultString($key) .'=';
+                $result .= static::defaultString($key) .'=';
             }
             if (is_array($value)) {
                 if ($quote === null) {
-                    $quoteStart = self::OPEN_SQUARE_BRACKET;
-                    $quoteEnd = self::CLOSE_SQUARE_BRACKET;
+                    $quoteStart = static::OPEN_SQUARE_BRACKET;
+                    $quoteEnd = static::CLOSE_SQUARE_BRACKET;
                 } else {
                     $quoteStart = $quote;
                     $quoteEnd = $quote;
                 }
-                $result .= $quoteStart . self::implodeRecursively($value, $glue, $quote) . $quoteEnd;
+                $result .= $quoteStart . static::implodeRecursively($value, $glue, $quote) . $quoteEnd;
             } else {
-                $result .= self::defaultString($value);
+                $result .= static::defaultString($value);
             }
         }
 
@@ -171,6 +171,6 @@ final class StringUtils
      */
     public static function isBlank($string)
     {
-        return (($string === null) || (is_string($string) && (trim($string) === self::EMPTY_STR)));
+        return (($string === null) || (is_string($string) && (trim($string) === static::EMPTY_STR)));
     }
 }

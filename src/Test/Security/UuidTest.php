@@ -3,20 +3,20 @@
 namespace Inneair\Synapps\Test\Util;
 
 use Inneair\Synapps\Test\AbstractSynappsTest;
-use Inneair\Synapps\Security\Uuid;
+use Inneair\Synapps\Security\UUID;
 
 /**
- * Class containing test suite for the <code>Uuid</code> class.
+ * Class containing test suite for the <code>UUID</code> class.
  */
-class UuidTest extends AbstractSynappsTest
+class UUIDTest extends AbstractSynappsTest
 {
     /**
      * Generates a UUID.
      */
     public function testUuid()
     {
-        $uuid = Uuid::randomUuid();
+        $uuid = UUID::randomUuid();
         $this->assertNotNull($uuid);
-        $this->assertTrue(mb_ereg_match(Uuid::REGEX_PATTERN, $uuid));
+        $this->assertTrue(mb_ereg_match(UUID::REGEX_PATTERN, $uuid));
     }
 }

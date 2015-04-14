@@ -4,7 +4,7 @@ namespace Inneair\Synapps\System;
 
 /**
  * This class encapsulates runtime information, i.e. the environment in which PHP executes. It provides an interface to
- * interact with this environment. This class doesn't provide any information about PHP itself, see PhpRuntime class in
+ * interact with this environment. This class does not provide any information about PHP itself, see PhpRuntime class in
  * the same namespace.
  */
 class Runtime
@@ -17,6 +17,7 @@ class Runtime
 
     /**
      * Prevents outer instanciation. Only the inner factory has control on instanciation.
+     * @codeCoverageIgnore
      */
     private function __construct()
     {
@@ -29,11 +30,11 @@ class Runtime
      */
     public static function getInstance()
     {
-        if (self::$instance === null) {
-            self::$instance = new self();
+        if (static::$instance === null) {
+            static::$instance = new static();
         }
 
-        return self::$instance;
+        return static::$instance;
     }
 
     /**

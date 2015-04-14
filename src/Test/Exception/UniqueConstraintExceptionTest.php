@@ -23,9 +23,9 @@ class UniqueConstraintExceptionTest extends AbstractSynappsTest
     {
         $hasException = false;
         try {
-            throw new UniqueConstraintException(self::PROPERTY);
+            throw new UniqueConstraintException(static::PROPERTY);
         } catch (UniqueConstraintException $e) {
-            $this->assertEquals(self::PROPERTY, $e->getProperty());
+            $this->assertEquals(static::PROPERTY, $e->getProperty());
             $hasException = true;
         }
         $this->assertException($hasException);
