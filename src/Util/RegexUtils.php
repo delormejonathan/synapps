@@ -1,6 +1,6 @@
 <?php
 
-namespace Inneair\Util;
+namespace Inneair\Synapps\Util;
 
 use RuntimeException;
 

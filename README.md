@@ -25,6 +25,11 @@ Syntax for changes: _`<type of modification> [domain] <description>`_
 
 `<description>` is a descriptive text of the modification. 
 
+#### 1.0.2 (2014-10-14)
+
+- UPG Added unit test to IO/File.
+- NEW Added Util\RegexUtils class to support multi-byte string when quoting string.
+
 #### 1.0.1 (2014-10-20)
 
 - UPG Added PHPUnit 4.2+ dependency for automated testing.
