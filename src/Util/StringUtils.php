@@ -81,7 +81,7 @@ final class StringUtils
      * @param mixed $defaultVar The default variable to return, if the variable to check is <code>null</code> (defaults
      * to the <code>NULL_STR</code> string).
      * @param mixed $quote The variable used to quote the variable returned.
-     * @return mixed The passed in variable, optionnaly enclosed between the given quotes if a string, or the default
+     * @return mixed The passed in variable, optionally enclosed between the given quotes if a string, or the default
      * one if it was <code>null</code>.
      */
     public static function defaultString($var, $defaultVar = self::NULL_STR, $quote = null)

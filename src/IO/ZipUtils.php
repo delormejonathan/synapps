@@ -20,7 +20,7 @@ final class ZipUtils
     /**
      * Extracts the content of a Zip archive into a directory.
      *
-     * If the target directory does not exist, it will be created. 
+     * If the target directory does not exist, it will be created.
      *
      * @param File $zipFile Zip file.
      * @param File $targetDirectory Target directory.

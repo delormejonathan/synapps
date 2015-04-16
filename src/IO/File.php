@@ -5,6 +5,8 @@ namespace Inneair\Synapps\IO;
 use DateTime;
 use Inneair\Synapps\System\OS;
 use Normalizer;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 /**
  * This class encapsulates properties and methods available to read/write content from/into a file. This is a portable
@@ -86,23 +88,25 @@ class File
             // Creates the destination directory.
             $destinationFile->createDirectory();
 
-            // Copies directory content.
-            $directory = dir($this->osPath);
-            $innerOsFilename = $directory->read();
-            try {
-                while ($innerOsFilename !== false) {
-                    if (($innerOsFilename !== '.') && ($innerOsFilename !== '..')) {
-                        $innerFilename = static::decodeOsFileName($innerOsFilename);
-                        $innerFile = new static($this->path . static::DIRECTORY_SEPARATOR . $innerFilename);
-                        $innerFile->copy($destinationFile->getPath() . static::DIRECTORY_SEPARATOR . $innerFilename);
+            /** @var RecursiveDirectoryIterator $iterator */
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($this->getPath(), RecursiveDirectoryIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::SELF_FIRST
+            );
+            foreach ($iterator as $item) {
+                $innerFilename = static::decodeOsFileName($iterator->getSubPathName());
+                $innerDestinationFile = new static($destinationFile->getPath() . DIRECTORY_SEPARATOR . $innerFilename);
+                if ($item->isDir()) {
+                    $innerDestinationFile->createDirectory();
+                } else {
+                    $innerFile = new static($this->getPath() . DIRECTORY_SEPARATOR . $innerFilename);
+                    if (!@copy($innerFile->getOsPath(), $innerDestinationFile->getOsPath())) {
+                        throw new IOException(
+                            'Cannot copy file from \'' . $innerFile->getPath() . '\' to \''
+                            . $innerDestinationFile->getPath() . '\''
+                        );
                     }
-
-                    $innerOsFilename = $directory->read();
                 }
-                $directory->close();
-            } catch (IOException $e) {
-                $directory->close();
-                throw $e;
             }
         } elseif (!@copy($this->osPath, $destinationFile->getOsPath())) {
             throw new IOException(
@@ -223,23 +227,19 @@ class File
 
         if ($this->isDirectory()) {
             if ($recursive && !$this->isSymbolicLink()) {
-                $directory = dir($this->osPath);
-                $innerOsFilename = $directory->read();
-                try {
-                    while ($innerOsFilename !== false) {
-                        if (($innerOsFilename !== '.') && ($innerOsFilename !== '..')) {
-                            $innerFile = new static(
-                                $this->path . static::DIRECTORY_SEPARATOR . static::decodeOsFileName($innerOsFilename)
-                            );
-                            $innerFile->delete($recursive);
-                        }
-
-                        $innerOsFilename = $directory->read();
+                /** @var RecursiveDirectoryIterator $iterator */
+                $iterator = new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator($this->getPath(), RecursiveDirectoryIterator::SKIP_DOTS),
+                    RecursiveIteratorIterator::CHILD_FIRST
+                );
+                foreach ($iterator as $item) {
+                    $innerFilename = static::decodeOsFileName($iterator->getSubPathName());
+                    $innerFile = new static($this->getPath() . DIRECTORY_SEPARATOR . $innerFilename);
+                    if ($item->isDir()) {
+                        $innerFile->deleteDirectory();
+                    } else {
+                        $innerFile->deleteFile();
                     }
-                    $directory->close();
-                } catch (IOException $e) {
-                    $directory->close();
-                    throw $e;
                 }
             }
 
@@ -525,26 +525,17 @@ class File
             throw new IOException('\'' . $this->path . '\' is not a valid directory');
         }
 
-        $directory = dir($this->osPath);
         $paths = array();
-        try {
-            $innerOsFilename = $directory->read();
-            $useFilter = ($pattern !== null);
-            while ($innerOsFilename !== false) {
-                $innerFilename = static::decodeOsFileName($innerOsFilename);
-                if (($innerOsFilename !== '.') && ($innerOsFilename !== '..')) {
-                    $result = ($useFilter) ? mb_ereg_match($pattern, $innerFilename) : true;
-                    if ($result) {
-                        $paths[] = $this->path . static::DIRECTORY_SEPARATOR . $innerFilename;
-                    }
-                }
+        $useFilter = ($pattern !== null);
 
-                $innerOsFilename = $directory->read();
+        $iterator = new RecursiveDirectoryIterator($this->getPath(), RecursiveDirectoryIterator::SKIP_DOTS);
+        while ($iterator->valid()) {
+            $innerFilename = static::decodeOsFileName($iterator->getSubPathName());
+            $result = ($useFilter) ? mb_ereg_match($pattern, $innerFilename) : true;
+            if ($result) {
+                $paths[] = $this->path . static::DIRECTORY_SEPARATOR . $innerFilename;
             }
-            $directory->close();
-        } catch (IOException $e) {
-            $directory->close();
-            throw $e;
+            $iterator->next();
         }
 
         return $paths;
