@@ -9,7 +9,7 @@ namespace Inneair\Synapps\System;
 class PhpRuntime
 {
     /**
-     * Prevents unwanted instanciation.
+     * Prevents unwanted instantiation.
      * @codeCoverageIgnore
      */
     private function __construct()

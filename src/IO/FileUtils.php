@@ -8,7 +8,7 @@ namespace Inneair\Synapps\IO;
 class FileUtils
 {
     /**
-     * Prevents unwanted instanciations.
+     * Prevents unwanted instantiations.
      * @codeCoverageIgnore
      */
     private function __construct()

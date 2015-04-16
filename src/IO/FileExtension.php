@@ -12,7 +12,7 @@ final class FileExtension
     const ZIP = 'zip';
 
     /**
-     * Private constructor prevents erroneous instanciations.
+     * Private constructor prevents erroneous instantiations.
      * @codeCoverageIgnore
      */
     private function __construct()

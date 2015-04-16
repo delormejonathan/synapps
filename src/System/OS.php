@@ -30,7 +30,7 @@ class OS
     private $macintosh;
 
     /**
-     * Prevents outer instanciation. Only the inner factory has control on instanciation.
+     * Prevents outer instantiation. Only the inner factory has control on instantiation.
      */
     private function __construct()
     {

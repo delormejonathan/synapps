@@ -54,7 +54,7 @@ final class Method
     const TRACE = 'TRACE';
 
     /**
-     * Private constructor prevents erroneous instanciations.
+     * Private constructor prevents erroneous instantiations.
      * @codeCoverageIgnore
      */
     private function __construct()

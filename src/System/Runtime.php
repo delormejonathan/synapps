@@ -16,7 +16,7 @@ class Runtime
     private static $instance = null;
 
     /**
-     * Prevents outer instanciation. Only the inner factory has control on instanciation.
+     * Prevents outer instantiation. Only the inner factory has control on instantiation.
      * @codeCoverageIgnore
      */
     private function __construct()

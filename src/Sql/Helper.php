@@ -30,7 +30,7 @@ class Helper
     const LIKE_SPECIAL_CHARACTERS_PATTERN = '(_|%|\\\\)';
 
     /**
-     * Empty private constructor to prevent erroneous instanciations.
+     * Empty private constructor to prevent erroneous instantiations.
      * @codeCoverageIgnore
      */
     private function __construct()
@@ -39,7 +39,7 @@ class Helper
 
     /**
      * Escapes special characters '_' and '%' if used in a pattern for a LIKE clause. The escape character is the anti-
-     * slash character '\', which is espaced too if present in the pattern.
+     * slash character '\', which is escaped too if present in the pattern.
      *
      * @param string $pattern Pattern.
      * @return string The escaped pattern. If the pattern is <code>null</code>, an empty string is returned.

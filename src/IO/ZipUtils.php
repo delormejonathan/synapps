@@ -10,7 +10,7 @@ use ZipArchive;
 final class ZipUtils
 {
     /**
-     * Prevents unwanted instanciations.
+     * Prevents unwanted instantiations.
      * @codeCoverageIgnore
      */
     private function __construct()

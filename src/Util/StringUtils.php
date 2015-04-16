@@ -44,7 +44,7 @@ final class StringUtils
     const CLOSE_SQUARE_BRACKET = ']';
 
     /**
-     * Empty private constructor to prevent erroneous instanciations.
+     * Empty private constructor to prevent erroneous instantiations.
      * @codeCoverageIgnore
      */
     private function __construct()
