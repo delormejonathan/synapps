@@ -100,22 +100,31 @@ class File
                     $innerDestinationFile->createDirectory();
                 } else {
                     $innerFile = new static($this->getPath() . DIRECTORY_SEPARATOR . $innerFilename);
-                    if (!@copy($innerFile->getOsPath(), $innerDestinationFile->getOsPath())) {
-                        throw new IOException(
-                            'Cannot copy file from \'' . $innerFile->getPath() . '\' to \''
-                            . $innerDestinationFile->getPath() . '\''
-                        );
-                    }
+                    $this->copyFile($innerFile, $innerDestinationFile);
                 }
             }
-        } elseif (!@copy($this->osPath, $destinationFile->getOsPath())) {
-            throw new IOException(
-                'Cannot copy file from \'' . $this->path . '\' to \'' . $destinationFile->getPath() . '\''
-            );
+        } else {
+            $this->copyFile($this, $destinationFile);
         }
 
         // Clears PHP cache so as it gives updated information about the destination file.
         clearstatcache(true, $destinationFile->getOsPath());
+    }
+
+    /**
+     * Run a native copy on file to destination.
+     *
+     * @param File $file File to copy.
+     * @param File $destinationFile Destination of the copy.
+     * @throws IOException If the file could not be copy.
+     */
+    private function copyFile(File $file, File $destinationFile)
+    {
+        if (!@copy($file->getOsPath(), $destinationFile->getOsPath())) {
+            throw new IOException(
+                'Cannot copy file from \'' . $file->getPath() . '\' to \'' . $destinationFile->getPath() . '\''
+            );
+        }
     }
 
     /**
@@ -149,7 +158,8 @@ class File
     {
         if ($this->isDirectory()) {
             return false;
-        } elseif ($this->exists()) {
+        }
+        if ($this->exists()) {
             throw new ExistingFileException($this->path);
         }
 
