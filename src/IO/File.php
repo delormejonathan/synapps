@@ -7,6 +7,7 @@ use Inneair\Synapps\System\OS;
 use Normalizer;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use UnexpectedValueException;
 
 /**
  * This class encapsulates properties and methods available to read/write content from/into a file. This is a portable
@@ -88,23 +89,29 @@ class File
             // Creates the destination directory.
             $destinationFile->createDirectory();
 
-            /** @var RecursiveDirectoryIterator $iterator */
-            $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($this->getPath(), RecursiveDirectoryIterator::SKIP_DOTS),
-                RecursiveIteratorIterator::SELF_FIRST
-            );
+            try {
+                /** @var RecursiveDirectoryIterator $iterator */
+                $iterator = new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator($this->osPath, RecursiveDirectoryIterator::SKIP_DOTS),
+                    RecursiveIteratorIterator::SELF_FIRST
+                );
+            } catch (UnexpectedValueException $e) {
+                throw new IOException($e);
+            }
             foreach ($iterator as $item) {
                 $innerFilename = static::decodeOsFileName($iterator->getSubPathName());
-                $innerDestinationFile = new static($destinationFile->getPath() . DIRECTORY_SEPARATOR . $innerFilename);
+                $innerDestinationFile = new static(
+                    $destinationFile->getPath() . File::DIRECTORY_SEPARATOR . $innerFilename
+                );
                 if ($item->isDir()) {
                     $innerDestinationFile->createDirectory();
                 } else {
-                    $innerFile = new static($this->getPath() . DIRECTORY_SEPARATOR . $innerFilename);
-                    $this->copyFile($innerFile, $innerDestinationFile);
+                    $innerFile = new static($this->getPath() . File::DIRECTORY_SEPARATOR . $innerFilename);
+                    $innerFile->copy($innerDestinationFile);
                 }
             }
         } else {
-            $this->copyFile($this, $destinationFile);
+            $this->copyFile($destinationFile);
         }
 
         // Clears PHP cache so as it gives updated information about the destination file.
@@ -118,11 +125,11 @@ class File
      * @param File $destinationFile Destination of the copy.
      * @throws IOException If the file could not be copy.
      */
-    private function copyFile(File $file, File $destinationFile)
+    private function copyFile(File $destinationFile)
     {
-        if (!@copy($file->getOsPath(), $destinationFile->getOsPath())) {
+        if (!@copy($this->osPath, $destinationFile->getOsPath())) {
             throw new IOException(
-                'Cannot copy file from \'' . $file->getPath() . '\' to \'' . $destinationFile->getPath() . '\''
+                'Cannot copy file from \'' . $this->path . '\' to \'' . $destinationFile->getPath() . '\''
             );
         }
     }
@@ -237,11 +244,15 @@ class File
 
         if ($this->isDirectory()) {
             if ($recursive && !$this->isSymbolicLink()) {
-                /** @var RecursiveDirectoryIterator $iterator */
-                $iterator = new RecursiveIteratorIterator(
-                    new RecursiveDirectoryIterator($this->getPath(), RecursiveDirectoryIterator::SKIP_DOTS),
-                    RecursiveIteratorIterator::CHILD_FIRST
-                );
+                try {
+                    /** @var RecursiveDirectoryIterator $iterator */
+                    $iterator = new RecursiveIteratorIterator(
+                        new RecursiveDirectoryIterator($this->osPath, RecursiveDirectoryIterator::SKIP_DOTS),
+                        RecursiveIteratorIterator::CHILD_FIRST
+                    );
+                } catch (UnexpectedValueException $e) {
+                    throw new IOException($e);
+                }
                 foreach ($iterator as $item) {
                     $innerFilename = static::decodeOsFileName($iterator->getSubPathName());
                     $innerFile = new static($this->getPath() . DIRECTORY_SEPARATOR . $innerFilename);
@@ -538,7 +549,7 @@ class File
         $paths = array();
         $useFilter = ($pattern !== null);
 
-        $iterator = new RecursiveDirectoryIterator($this->getPath(), RecursiveDirectoryIterator::SKIP_DOTS);
+        $iterator = new RecursiveDirectoryIterator($this->osPath, RecursiveDirectoryIterator::SKIP_DOTS);
         while ($iterator->valid()) {
             $innerFilename = static::decodeOsFileName($iterator->getSubPathName());
             $result = ($useFilter) ? mb_ereg_match($pattern, $innerFilename) : true;

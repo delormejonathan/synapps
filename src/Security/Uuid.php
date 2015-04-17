@@ -3,17 +3,18 @@
 namespace Inneair\Synapps\Security;
 
 use Exception;
+use Inneair\Synapps\System\OS;
 
 /**
  * This class encapsulates an immutable universally unique identifier (UUID).
  */
-class UUID
+class Uuid
 {
     /**
      * A pattern used to know if a string is a UUID.
      * @var string
      */
-    const REGEX_PATTERN = '^\p{XDigit}{8}-\p{XDigit}{4}-\p{XDigit}{4}-\p{XDigit}{4}-\p{XDigit}{12}$';
+    const REGEX_PATTERN = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$';
 
     /**
      * Low part of time.
@@ -74,20 +75,19 @@ class UUID
     {
         $prBits = null;
         $fp = false;
-        try {
-            $fp = @fopen('/dev/urandom', 'rb');
-            $prBits .= @fread($fp, 16);
-            @fclose($fp);
-        } catch (Exception $e) {
-            if ($fp === false) {
-                // If /dev/urandom isn't available (eg: in non-unix systems), use mt_rand().
-                $prBits = '';
-                for ($cnt = 0; $cnt < 16; $cnt++) {
-                    $prBits .= chr(mt_rand(0, 255));
-                }
-            } else {
+        if (OS::getInstance()->isWindows()) {
+            // If /dev/urandom isn't available (eg: in non-unix systems), use mt_rand().
+            $prBits = "";
+            for ($cnt = 0; $cnt < 16; $cnt++) {
+                $prBits .= chr(mt_rand(0, 255));
+            }
+        } else {
+            try {
+                $fp = @fopen('/dev/urandom', 'rb');
+                $prBits .= @fread($fp, 16);
                 @fclose($fp);
-                throw $e;
+            } catch (Exception $e) {
+                @fclose($fp);
             }
         }
 
@@ -99,7 +99,7 @@ class UUID
 
         /**
          * Set the four most significant bits (bits 12 through 15) of the
-         * time_hi_and_version field to the 4-bit version number from
+         * timeHiAndVersion field to the 4-bit version number from
          * Section 4.1.3.
          *
          * @see http://tools.ietf.org/html/rfc4122#section-4.1.3
@@ -110,7 +110,7 @@ class UUID
 
         /**
          * Set the two most significant bits (bits 6 and 7) of the
-         * clock_seq_hi_and_reserved to zero and one, respectively.
+         * clockSeqHiAndReserved to zero and one, respectively.
          */
         $clockSeqHiAndReserved = hexdec($clockSeqHiAndReserved);
         $clockSeqHiAndReserved = $clockSeqHiAndReserved >> 2;
@@ -120,10 +120,10 @@ class UUID
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @return string String representation of this UUID, made up of 32 hex digits and 4 hyphens:
-     * <time_low> '-' <time_mid> '-' <time_high_and_version> '-' <variant_and_sequence> '-' <node>
+     * <timeLow> '-' <timeMid> '-' <timeHiAndVersion> '-' <variant_and_sequence> '-' <node>
      */
     public function __toString()
     {

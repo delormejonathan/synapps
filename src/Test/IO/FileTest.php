@@ -616,8 +616,10 @@ class FileTest extends AbstractSynappsTest
         try {
             $file1->setContent($content);
             $this->assertEquals($content, $file1->getContent());
-        } finally {
             $file1->delete();
+        } catch (Exception $e) {
+            $file1->delete();
+            throw $e;
         }
 
         // Set content on directory.
@@ -649,7 +651,7 @@ class FileTest extends AbstractSynappsTest
 
     /**
      * Asserts the content of two files/directories strictly equal.
-     * 
+     *
      * @param File $file1 A first file.
      * @param File $file2 A second file.
      */
@@ -683,7 +685,7 @@ class FileTest extends AbstractSynappsTest
 
     /**
      * Deletes a file, and asserts it does not exist anymore.
-     * 
+     *
      * @param File $file A file.
      * @throws IOException If the file cannot be deleted.
      */

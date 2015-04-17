@@ -37,8 +37,10 @@ final class ZipUtils
             if (!@$zipArchive->extractTo($targetDirectory->getOsPath())) {
                 throw new IOException('Cannot extract content of ZIP archive: ' . $zipFile->getPath());
             }
-        } finally {
             $zipArchive->close();
+        } catch (IOException $e) {
+            $zipArchive->close();
+            throw $e;
         }
     }
 }

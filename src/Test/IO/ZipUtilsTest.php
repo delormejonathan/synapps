@@ -46,7 +46,7 @@ class ZipUtilsTest extends AbstractSynappsTest
     {
         $zipFile = new File($this->getDataPathPrefix() . static::ZIP_FILE_PATH);
         $targetDirectory = new File($this->getDataPathPrefix() . static::TARGET_DIR_PATH);
-    
+
         // Create a Zip archive.
         $zipArchive = new ZipArchive();
         try {
@@ -56,10 +56,12 @@ class ZipUtilsTest extends AbstractSynappsTest
             if (!$zipArchive->addFromString(static::FILE_PATH, StringUtils::EMPTY_STR)) {
                 throw new IOException();
             }
-        } finally {
             $zipArchive->close();
+        } catch (IOException $e) {
+            $zipArchive->close();
+            throw $e;
         }
-    
+
         ZipUtils::extractTo($zipFile, $targetDirectory);
         $this->assertTrue($targetDirectory->exists());
         $inclosedFile = new File($targetDirectory->getPath() . File::DIRECTORY_SEPARATOR . static::FILE_PATH);
@@ -83,8 +85,10 @@ class ZipUtilsTest extends AbstractSynappsTest
             if (!$zipArchive->addFromString(static::FILE_PATH, 'test')) {
                 throw new IOException();
             }
-        } finally {
             $zipArchive->close();
+        } catch (IOException $e) {
+            $zipArchive->close();
+            throw $e;
         }
 
         $hasException = false;

@@ -22,11 +22,18 @@ class OutputBuffer implements OutputBufferInterface
      *
      * @param callable $outputCallback See ob_start.
      * @param int $chunkSize See ob_start.
-     * @param int $flags See ob_start.
+     * @param int $flags See ob_start (<code>null</code> means PHP_OUTPUT_HANDLER_STDFLAGS, if PHP >= 5.4).
      * @throws OutputBufferingException If the output buffer cannot be turned on.
      */
-    public function __construct($outputCallback = null, $chunkSize = 0, $flags = PHP_OUTPUT_HANDLER_STDFLAGS)
+    public function __construct($outputCallback = null, $chunkSize = 0, $flags = null)
     {
+        if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+            if ($flags === null) {
+                $flags = PHP_OUTPUT_HANDLER_STDFLAGS;
+            }
+        } else {
+            $flags = true;
+        }
         $result = @ob_start($outputCallback, $chunkSize, $flags);
         if (!$result) {
             throw new OutputBufferingException('Cannot start output buffering.');
@@ -61,7 +68,7 @@ class OutputBuffer implements OutputBufferInterface
     public function close()
     {
         $this->checkClosed();
-        if (!ob_end_clean()) {
+        if (!@ob_end_clean()) {
             throw new OutputBufferingException('Output buffer cannot be closed.');
         }
         $this->closed = true;

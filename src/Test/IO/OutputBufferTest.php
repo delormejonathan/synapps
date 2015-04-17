@@ -28,8 +28,10 @@ class OutputBufferTest extends AbstractSynappsTest
             $this->assertEquals(static::CONTENT, $outputBuffer->get());
             $outputBuffer->clean();
             $this->assertEmpty($outputBuffer->get());
-        } finally {
             $outputBuffer->close();
+        } catch (Exception $e) {
+            $outputBuffer->close();
+            throw $e;
         }
 
         $hasException = false;
@@ -52,11 +54,14 @@ class OutputBufferTest extends AbstractSynappsTest
             $outputBuffer = new OutputBuffer();
             echo static::CONTENT;
             $outputBuffer->flush();
-        } finally {
+            $outputBuffer->close();
+            $trashOutputBuffer->close();
+        } catch (Exception $e) {
             if (isset($outputBuffer)) {
                 $outputBuffer->close();
             }
             $trashOutputBuffer->close();
+            throw $e;
         }
 
         $hasException = false;
@@ -78,12 +83,16 @@ class OutputBufferTest extends AbstractSynappsTest
             $childOutputBuffer = new OutputBuffer();
             echo static::CONTENT;
             $this->assertEquals(static::CONTENT, $childOutputBuffer->get());
-        } finally {
+            $childOutputBuffer->close();
+            $this->assertEmpty($rootOutputBuffer->get());
+            $rootOutputBuffer->close();
+        } catch (Exception $e) {
             if (isset($childOutputBuffer)) {
                 $childOutputBuffer->close();
             }
             $this->assertEmpty($rootOutputBuffer->get());
             $rootOutputBuffer->close();
+            throw $e;
         }
     }
 
@@ -97,8 +106,10 @@ class OutputBufferTest extends AbstractSynappsTest
             $this->assertEquals(0, $outputBuffer->getLength());
             echo static::CONTENT;
             $this->assertEquals(mb_strlen(static::CONTENT), $outputBuffer->getLength());
-        } finally {
             $outputBuffer->close();
+        } catch (Exception $e) {
+            $outputBuffer->close();
+            throw $e;
         }
 
         $hasException = false;
@@ -119,10 +130,12 @@ class OutputBufferTest extends AbstractSynappsTest
         $outputBuffer = new OutputBuffer();
         try {
             $this->assertEquals($currentLevel + 1, $outputBuffer->getLevel());
-        } finally {
             $outputBuffer->close();
+        } catch (Exception $e) {
+            $outputBuffer->close();
+            throw $e;
         }
-        
+
         $hasException = false;
         try {
             $outputBuffer->getLevel();
@@ -142,8 +155,10 @@ class OutputBufferTest extends AbstractSynappsTest
             $status = $outputBuffer->getStatus();
             $this->assertTrue(is_array($status));
             $this->assertContainsOnly('string', array_keys($status));
-        } finally {
             $outputBuffer->close();
+        } catch (Exception $e) {
+            $outputBuffer->close();
+            throw $e;
         }
 
         $hasException = false;
