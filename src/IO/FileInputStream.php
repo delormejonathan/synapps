@@ -62,7 +62,11 @@ class FileInputStream
     {
         $result = @fread($this->filePointer, $maxLength);
         if ($result === false) {
-            throw new IOException('Cannot read line in file: ' . $this->file->getPath());
+            if (feof($this->filePointer)) {
+                $result = null;
+            } else {
+                throw new IOException('Cannot read line in file: ' . $this->file->getPath());
+            }
         }
         return $result;
     }
