@@ -8,6 +8,12 @@ namespace Inneair\Synapps\IO;
 class FileInputStream
 {
     /**
+     * Default length of the read buffer.
+     * @var int
+     */
+    const DEFAULT_BUFFER_LENGTH = 4096;
+
+    /**
      * File.
      * @var File
      */
@@ -29,7 +35,7 @@ class FileInputStream
     {
         $this->file = $file;
 
-        if (!$this->file->exists()) {
+        if (!$this->file->isFile()) {
             throw new FileNotFoundException($file->getPath());
         }
 
@@ -46,7 +52,7 @@ class FileInputStream
      */
     public function close()
     {
-        if (!fclose($this->filePointer)) {
+        if (!@fclose($this->filePointer)) {
             throw new IOException('Cannot close file: ' . $this->file->getPath());
         }
     }
@@ -54,15 +60,15 @@ class FileInputStream
     /**
      * Reads a line of text from this input stream, and
      *
-     * @param string $maxLength Max number of bytes that shall be read (defaults to <code>null</code>).
+     * @param string $maxLength Max number of bytes that shall be read (defaults to DEFAULT_BUFFER_LENGTH).
      * @return string The read line.
      * @throws IOException If a line cannot be read.
      */
-    public function readLine($maxLength = null)
+    public function readLine($maxLength = self::DEFAULT_BUFFER_LENGTH)
     {
-        $result = @fread($this->filePointer, $maxLength);
+        $result = @fgets($this->filePointer, $maxLength);
         if ($result === false) {
-            if (feof($this->filePointer)) {
+            if (@feof($this->filePointer)) {
                 $result = null;
             } else {
                 throw new IOException('Cannot read line in file: ' . $this->file->getPath());
