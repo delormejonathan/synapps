@@ -8,6 +8,7 @@ use Inneair\Synapps\IO\FileNotFoundException;
 use Inneair\Synapps\IO\IOException;
 use Inneair\Synapps\Test\AbstractSynappsTest;
 use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamFile;
 
 /**
@@ -16,7 +17,7 @@ use org\bovigo\vfs\vfsStreamFile;
 class FileInputStreamTest extends AbstractSynappsTest
 {
     /**
-     * File content
+     * File content.
      * @var string
      */
     const CONTENT = '0123456789';
@@ -26,6 +27,10 @@ class FileInputStreamTest extends AbstractSynappsTest
      */
     const FILE_NAME = 'file';
 
+    /**
+     * Virtual root directory
+     * @var vfsStreamDirectory
+     */
     private $rootDirectory;
 
     public function setUp()
@@ -40,8 +45,13 @@ class FileInputStreamTest extends AbstractSynappsTest
      */
     public function testBuildInputStreamWithNonExistingFile()
     {
-        $this->setExpectedException(FileNotFoundException::class);
-        new FileInputStream(new File(static::FILE_NAME));
+        $hasException = false;
+        try {
+            new FileInputStream(new File(static::FILE_NAME));
+        } catch (FileNotFoundException $e) {
+            $hasException = true;
+        }
+        $this->assertException($hasException);
     }
 
     /**
@@ -49,11 +59,17 @@ class FileInputStreamTest extends AbstractSynappsTest
      */
     public function testBuildInputStreamWithNonReadableFile()
     {
-        $this->setExpectedException(IOException::class);
         $file = new vfsStreamFile(static::FILE_NAME);
         $file->chmod(0000);
         $this->rootDirectory->addChild($file);
-        new FileInputStream(new File($file->url()));
+
+        $hasException = false;
+        try {
+            new FileInputStream(new File($file->url()));
+        } catch (IOException $e) {
+            $hasException = true;
+        }
+        $this->assertException($hasException);
     }
 
     /**
