@@ -23,7 +23,11 @@ Syntax for changes: _`<type of modification> [domain] <description>`_
 
 `[domain]` is the name of the updated domain/component, and is optional (brackets are mandatory).
 
-`<description>` is a descriptive text of the modification. 
+`<description>` is a descriptive text of the modification.
+
+#### 1.0.3 (2015-05-29)
+
+- NEW Added FileInputStream class.
 
 #### 1.0.2 (2014-10-14)
 
@@ -45,7 +49,7 @@ Syntax for changes: _`<type of modification> [domain] <description>`_
 ------
 ## 2. Requirements
 ### Software requirements
-- [PHP](http://www.php.net/) 5.5
+- [PHP](http://www.php.net/) 5.3+
 
 ### PHP configuration
 #### Settings
