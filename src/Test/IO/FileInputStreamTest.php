@@ -33,6 +33,9 @@ class FileInputStreamTest extends AbstractSynappsTest
      */
     private $rootDirectory;
 
+    /**
+     * {@inheritDoc}
+     */
     public function setUp()
     {
         $this->rootDirectory = vfsStream::setup();
@@ -83,7 +86,8 @@ class FileInputStreamTest extends AbstractSynappsTest
 
         $inputStream = null;
         try {
-            $inputStream = new FileInputStream(new File($file->url()));
+            $inputFile = new File($file->url());
+            $inputStream = new FileInputStream($inputFile);
             $inputStream->close();
         } catch (Exception $e) {
             if ($inputStream !== null) {
@@ -91,6 +95,7 @@ class FileInputStreamTest extends AbstractSynappsTest
             }
             throw $e;
         }
+        $this->assertSame($inputFile, $inputStream->getFile());
 
         $hasException = false;
         try {

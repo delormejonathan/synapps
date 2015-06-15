@@ -58,6 +58,16 @@ class FileInputStream
     }
 
     /**
+     * Gets the input stream is based on.
+     *
+     * @return File The file.
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
      * Reads a line of text from this input stream, and
      *
      * @param string $maxLength Max number of bytes that shall be read (defaults to DEFAULT_BUFFER_LENGTH).
