@@ -21,8 +21,8 @@ abstract class AbstractTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        // Clean this test environment
-        $this->clean();
+        // Perform additional setup
+        $this->afterSetUp();
     }
 
     /**
@@ -35,8 +35,21 @@ abstract class AbstractTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Performs additional setup tasks, when needed, and cleans the environment.
+     *
+     * This method may be overriden by concrete tests, to perform additional tasks after the root setup.
+     * This method is called after the setup is done, and before the cleaning is done, in the base class. Sub-classes
+     * shall always call this parent method before any statements.
+     */
+    protected function afterSetUp()
+    {
+        // Clean this test environment
+        $this->clean();
+    }
+
+    /**
      * Cleans the environment before/after a unitary test execution.
-     * 
+     *
      * This method may be overriden by concrete tests, to perform additional cleaning tasks before/after the execution.
      * This method is called after the setup is done, and before the teardown is done, in the base class. Sub-classes
      * shall always call this parent method before any statements.
