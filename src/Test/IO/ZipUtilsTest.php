@@ -50,7 +50,7 @@ class ZipUtilsTest extends AbstractSynappsTest
         // Create a Zip archive.
         $zipArchive = new ZipArchive();
         try {
-            if ($zipArchive->open($zipFile->getOsPath(), ZipArchive::OVERWRITE) !== true) {
+            if ($zipArchive->open($zipFile->getOsPath(), ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE) !== true) {
                 throw new IOException();
             }
             if (!$zipArchive->addFromString(static::FILE_PATH, StringUtils::EMPTY_STR)) {
@@ -79,7 +79,7 @@ class ZipUtilsTest extends AbstractSynappsTest
         // Create a Zip archive.
         $zipArchive = new ZipArchive();
         try {
-            if ($zipArchive->open($zipFile->getOsPath(), ZipArchive::OVERWRITE) !== true) {
+            if ($zipArchive->open($zipFile->getOsPath(), ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE) !== true) {
                 throw new IOException();
             }
             if (!$zipArchive->addFromString(static::FILE_PATH, 'test')) {

@@ -25,6 +25,10 @@ Syntax for changes: _`<type of modification> [domain] <description>`_
 
 `<description>` is a descriptive text of the modification.
 
+#### 1.0.4 (2016-01-05)
+
+- UPG Upgrade for PHP 7
+
 #### 1.0.3 (2015-05-29)
 
 - NEW Added FileInputStream class.
