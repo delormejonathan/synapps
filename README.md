@@ -25,6 +25,11 @@ Syntax for changes: _`<type of modification> [domain] <description>`_
 
 `<description>` is a descriptive text of the modification.
 
+#### 1.0.6 (2017-01-06)
+
+- UPG Upgrade vendors
+- REF Move tests outside src folder
+
 #### 1.0.5 (2016-01-05)
 
 - UPG Upgrade for PHP 7

@@ -3,6 +3,7 @@
 namespace Inneair\Synapps\Test\IO;
 
 use DateTime;
+use Exception;
 use Inneair\Synapps\IO\ExistingFileException;
 use Inneair\Synapps\IO\File;
 use Inneair\Synapps\IO\FileNotFoundException;

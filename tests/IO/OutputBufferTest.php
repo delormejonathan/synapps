@@ -2,6 +2,7 @@
 
 namespace Inneair\Synapps\Test\IO;
 
+use Exception;
 use Inneair\Synapps\Exception\OutputBufferingException;
 use Inneair\Synapps\IO\OutputBuffer;
 use Inneair\Synapps\Test\AbstractSynappsTest;

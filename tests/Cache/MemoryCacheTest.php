@@ -2,6 +2,7 @@
 
 namespace Inneair\Synapps\Test\Cache;
 
+use Inneair\Synapps\Cache\CacheInterface;
 use Inneair\Synapps\Cache\MemoryCache;
 use Inneair\Synapps\Test\AbstractTest;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -35,7 +36,7 @@ class MemoryCacheTest extends AbstractTest
     {
         parent::setUp();
 
-        $this->nestedCache = $this->getMock('Inneair\Synapps\Cache\CacheInterface');
+        $this->nestedCache = $this->createMock(CacheInterface::class);
     }
 
     /**

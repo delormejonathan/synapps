@@ -2,8 +2,6 @@
 
 namespace Inneair\Synapps\Test;
 
-use Exception;
-
 /**
  * Base class for all PHPUnit tests in the Synapps library, and providing methods to access the data directory.
  */
@@ -39,7 +37,7 @@ abstract class AbstractSynappsTest extends AbstractTest
      */
     protected static function getRelativePathToData()
     {
-        return '../data/test';
+        return './data/test';
     }
 
     /**

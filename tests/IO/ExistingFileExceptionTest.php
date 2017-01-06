@@ -22,8 +22,7 @@ class ExistingFileExceptionTest extends AbstractSynappsTest
     public function testFilePath()
     {
         $hasException = false;
-        try
-        {
+        try {
             throw new ExistingFileException(static::FILE_PATH);
         } catch (ExistingFileException $e) {
             $this->assertEquals(static::FILE_PATH, $e->getFilePath());

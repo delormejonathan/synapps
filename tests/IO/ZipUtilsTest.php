@@ -74,7 +74,7 @@ class ZipUtilsTest extends AbstractSynappsTest
     public function testExtractToUnknownDirectory()
     {
         $zipFile = new File($this->getDataPathPrefix() . static::ZIP_FILE_PATH);
-        $targetDirectory = new File('abcd://' . $this->getDataPathPrefix() . static::TARGET_DIR_PATH);
+        $targetDirectory = new File("\0".'abcd://' . $this->getDataPathPrefix() . static::TARGET_DIR_PATH);
 
         // Create a Zip archive.
         $zipArchive = new ZipArchive();

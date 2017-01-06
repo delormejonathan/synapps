@@ -2,6 +2,7 @@
 
 namespace Inneair\Synapps\Test\IO;
 
+use Exception;
 use Inneair\Synapps\IO\File;
 use Inneair\Synapps\IO\FileInputStream;
 use Inneair\Synapps\IO\FileNotFoundException;
@@ -115,6 +116,7 @@ class FileInputStreamTest extends AbstractSynappsTest
         $file->setContent(static::CONTENT);
         $this->rootDirectory->addChild($file);
 
+        $inputStream = null;
         $line1 = null;
         try {
             $inputStream = new FileInputStream(new File($file->url()));
