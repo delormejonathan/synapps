@@ -593,14 +593,14 @@ class FileTest extends AbstractSynappsTest
 
         // Creates a file and gets its last modified date.
         $currentDate = new DateTime();
-        $this->assertEquals(0, sleep(1));
+        $this->assertEquals(0, sleep(2));
         $file = new File($this->getDataPathPrefix() . static::FILE_NAME_1);
         $file->create();
         $dateCreated = $file->getLastModifiedDate();
         $this->assertGreaterThan($currentDate->getTimestamp(), $dateCreated->getTimestamp());
 
         // Touches the file, and checks its last modified date was updated.
-        $this->assertEquals(0, sleep(1));
+        $this->assertEquals(0, sleep(2));
         $file->touch();
         $this->assertGreaterThan($dateCreated->getTimestamp(), $file->getLastModifiedDate()->getTimestamp());
     }

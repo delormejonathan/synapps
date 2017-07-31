@@ -2,13 +2,13 @@
 
 namespace Inneair\Synapps\Test;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Base class for all PHPUnit tests, providing a cleaning method which ensures test environment is reset correctly
  * between each test case.
  */
-abstract class AbstractTest extends PHPUnit_Framework_TestCase
+abstract class AbstractTest extends TestCase
 {
     /**
      * A message that shall be used in assertions, when an exception did not occur.

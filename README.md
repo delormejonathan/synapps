@@ -25,6 +25,11 @@ Syntax for changes: _`<type of modification> [domain] <description>`_
 
 `<description>` is a descriptive text of the modification.
 
+#### 1.0.7 (2017-07-31)
+
+- UPG Upgrade vendors
+- BUG Fix a test with the new PHPUnit version 6
+
 #### 1.0.6 (2017-01-06)
 
 - UPG Upgrade vendors
