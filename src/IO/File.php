@@ -5,9 +5,6 @@ namespace Inneair\Synapps\IO;
 use DateTime;
 use Inneair\Synapps\System\OS;
 use Normalizer;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use UnexpectedValueException;
 
 /**
  * This class encapsulates properties and methods available to read/write content from/into a file. This is a portable
@@ -56,8 +53,8 @@ class File
      */
     public function __construct($path)
     {
-        $this->path = static::normalizePath($path);
-        $this->osPath = static::encodeOsFileName($this->path);
+        $this->path = self::normalizePath($path);
+        $this->osPath = self::encodeOsFileName($this->path);
     }
 
     /**
@@ -76,8 +73,8 @@ class File
      */
     public function copy($destination)
     {
-        $destinationFile = ($destination instanceof static) ? $destination : new static($destination);
-        $parentFile = new static($destinationFile->getParentPath());
+        $destinationFile = ($destination instanceof self) ? $destination : new self($destination);
+        $parentFile = new self($destinationFile->getParentPath());
         if (!$parentFile->exists()) {
             throw new FileNotFoundException($parentFile->getPath());
         }
@@ -89,49 +86,32 @@ class File
             // Creates the destination directory.
             $destinationFile->createDirectory();
 
+            // Copies directory content.
+            $directory = dir($this->osPath);
+            $innerOsFilename = $directory->read();
             try {
-                /** @var RecursiveDirectoryIterator $iterator */
-                $iterator = new RecursiveIteratorIterator(
-                    new RecursiveDirectoryIterator($this->osPath, RecursiveDirectoryIterator::SKIP_DOTS),
-                    RecursiveIteratorIterator::SELF_FIRST
-                );
-            } catch (UnexpectedValueException $e) {
-                throw new IOException($e);
-            }
-            foreach ($iterator as $item) {
-                $innerFilename = static::decodeOsFileName($iterator->getSubPathName());
-                $innerDestinationFile = new static(
-                    $destinationFile->getPath() . File::DIRECTORY_SEPARATOR . $innerFilename
-                );
-                if ($item->isDir()) {
-                    $innerDestinationFile->createDirectory();
-                } else {
-                    $innerFile = new static($this->getPath() . File::DIRECTORY_SEPARATOR . $innerFilename);
-                    $innerFile->copy($innerDestinationFile);
+                while ($innerOsFilename !== false) {
+                    if (($innerOsFilename !== '.') && ($innerOsFilename !== '..')) {
+                        $innerFilename = self::decodeOsFileName($innerOsFilename);
+                        $innerFile = new self($this->path . self::DIRECTORY_SEPARATOR . $innerFilename);
+                        $innerFile->copy($destinationFile->getPath() . self::DIRECTORY_SEPARATOR . $innerFilename);
+                    }
+
+                    $innerOsFilename = $directory->read();
                 }
+                $directory->close();
+            } catch (IOException $e) {
+                $directory->close();
+                throw $e;
             }
-        } else {
-            $this->copyFile($destinationFile);
-        }
-
-        // Clears PHP cache so as it gives updated information about the destination file.
-        clearstatcache(true, $destinationFile->getOsPath());
-    }
-
-    /**
-     * Run a native copy on file to destination.
-     *
-     * @param File $file File to copy.
-     * @param File $destinationFile Destination of the copy.
-     * @throws IOException If the file could not be copy.
-     */
-    private function copyFile(File $destinationFile)
-    {
-        if (!@copy($this->osPath, $destinationFile->getOsPath())) {
+        } elseif (!@copy($this->osPath, $destinationFile->getOsPath())) {
             throw new IOException(
                 'Cannot copy file from \'' . $this->path . '\' to \'' . $destinationFile->getPath() . '\''
             );
         }
+
+        // Clears PHP cache so as it gives updated information about the destination file.
+        clearstatcache(true, $destinationFile->getOsPath());
     }
 
     /**
@@ -165,8 +145,7 @@ class File
     {
         if ($this->isDirectory()) {
             return false;
-        }
-        if ($this->exists()) {
+        } elseif ($this->exists()) {
             throw new ExistingFileException($this->path);
         }
 
@@ -188,7 +167,7 @@ class File
      */
     public function createSymbolicLink($target)
     {
-        $targetFile = ($target instanceof static) ? $target : new static($target);
+        $targetFile = ($target instanceof self) ? $target : new self($target);
         if (!$targetFile->exists()) {
             throw new FileNotFoundException($targetFile->getPath());
         }
@@ -216,7 +195,7 @@ class File
     {
         $os = OS::getInstance();
         if ($os->isWindows()) {
-            return mb_convert_encoding($fileName, 'UTF-8', static::WINDOWS_FS_ENCODING);
+            return mb_convert_encoding($fileName, 'UTF-8', self::WINDOWS_FS_ENCODING);
         } elseif ($os->isMacintosh()) {
             return Normalizer::normalize($fileName, Normalizer::FORM_C);
         } else {
@@ -244,23 +223,23 @@ class File
 
         if ($this->isDirectory()) {
             if ($recursive && !$this->isSymbolicLink()) {
+                $directory = dir($this->osPath);
+                $innerOsFilename = $directory->read();
                 try {
-                    /** @var RecursiveDirectoryIterator $iterator */
-                    $iterator = new RecursiveIteratorIterator(
-                        new RecursiveDirectoryIterator($this->osPath, RecursiveDirectoryIterator::SKIP_DOTS),
-                        RecursiveIteratorIterator::CHILD_FIRST
-                    );
-                } catch (UnexpectedValueException $e) {
-                    throw new IOException($e);
-                }
-                foreach ($iterator as $item) {
-                    $innerFilename = static::decodeOsFileName($iterator->getSubPathName());
-                    $innerFile = new static($this->getPath() . DIRECTORY_SEPARATOR . $innerFilename);
-                    if ($item->isDir()) {
-                        $innerFile->deleteDirectory();
-                    } else {
-                        $innerFile->deleteFile();
+                    while ($innerOsFilename !== false) {
+                        if (($innerOsFilename !== '.') && ($innerOsFilename !== '..')) {
+                            $innerFile = new self(
+                                $this->path . self::DIRECTORY_SEPARATOR . self::decodeOsFileName($innerOsFilename)
+                            );
+                            $innerFile->delete($recursive);
+                        }
+
+                        $innerOsFilename = $directory->read();
                     }
+                    $directory->close();
+                } catch (IOException $e) {
+                    $directory->close();
+                    throw $e;
                 }
             }
 
@@ -334,7 +313,7 @@ class File
     {
         $os = OS::getInstance();
         if ($os->isWindows()) {
-            return mb_convert_encoding($fileName, static::WINDOWS_FS_ENCODING);
+            return mb_convert_encoding($fileName, self::WINDOWS_FS_ENCODING);
         } elseif ($os->isMacintosh()) {
             return Normalizer::normalize($fileName, Normalizer::FORM_D);
         } else {
@@ -468,7 +447,7 @@ class File
             throw new FileNotFoundException($this->path);
         }
 
-        return static::normalizePath($realPath);
+        return self::normalizePath($realPath);
     }
 
     /**
@@ -546,17 +525,26 @@ class File
             throw new IOException('\'' . $this->path . '\' is not a valid directory');
         }
 
+        $directory = dir($this->osPath);
         $paths = array();
-        $useFilter = ($pattern !== null);
+        try {
+            $innerOsFilename = $directory->read();
+            $useFilter = ($pattern !== null);
+            while ($innerOsFilename !== false) {
+                $innerFilename = self::decodeOsFileName($innerOsFilename);
+                if (($innerOsFilename !== '.') && ($innerOsFilename !== '..')) {
+                    $result = ($useFilter) ? mb_ereg_match($pattern, $innerFilename) : true;
+                    if ($result) {
+                        $paths[] = $this->path . self::DIRECTORY_SEPARATOR . $innerFilename;
+                    }
+                }
 
-        $iterator = new RecursiveDirectoryIterator($this->osPath, RecursiveDirectoryIterator::SKIP_DOTS);
-        while ($iterator->valid()) {
-            $innerFilename = static::decodeOsFileName($iterator->getSubPathName());
-            $result = ($useFilter) ? mb_ereg_match($pattern, $innerFilename) : true;
-            if ($result) {
-                $paths[] = $this->path . static::DIRECTORY_SEPARATOR . $innerFilename;
+                $innerOsFilename = $directory->read();
             }
-            $iterator->next();
+            $directory->close();
+        } catch (IOException $e) {
+            $directory->close();
+            throw $e;
         }
 
         return $paths;
@@ -580,9 +568,8 @@ class File
         $path = rtrim($path, '/\\');
         if ($normalizeSeparators) {
             $searchedDirectorySeparator =
-                ($usePortableDirectorySeparator ? DIRECTORY_SEPARATOR : static::DIRECTORY_SEPARATOR);
-            $newDirectorySeparator = ($usePortableDirectorySeparator)
-                ? static::DIRECTORY_SEPARATOR : DIRECTORY_SEPARATOR;
+                ($usePortableDirectorySeparator ? DIRECTORY_SEPARATOR : self::DIRECTORY_SEPARATOR);
+            $newDirectorySeparator = ($usePortableDirectorySeparator) ? self::DIRECTORY_SEPARATOR : DIRECTORY_SEPARATOR;
             $pattern = str_replace('\\', '\\\\', $searchedDirectorySeparator);
             $result = mb_ereg_replace($pattern, $newDirectorySeparator, $path);
             if ($result !== false) {
@@ -619,7 +606,7 @@ class File
      */
     public function rename($destination)
     {
-        $destinationFile = ($destination instanceof static) ? $destination : new static($destination);
+        $destinationFile = ($destination instanceof self) ? $destination : new self($destination);
         // Renaming with a case change is enabled, otherwise the destination file must not already exist.
         if ((mb_strtolower($this->getPath()) !== mb_strtolower($destinationFile->getPath()))
             && $destinationFile->exists()
@@ -701,7 +688,7 @@ class File
     }
 
     /**
-     * @codeCoverageIgnore
+     * {@inheritDoc}
      */
     public function __toString()
     {

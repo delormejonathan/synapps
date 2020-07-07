@@ -54,8 +54,7 @@ final class Header
     const STATUS = 'Status';
 
     /**
-     * Private constructor prevents erroneous instantiations.
-     * @codeCoverageIgnore
+     * Private constructor prevents erroneous instanciations.
      */
     private function __construct()
     {

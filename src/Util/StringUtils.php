@@ -44,8 +44,7 @@ final class StringUtils
     const CLOSE_SQUARE_BRACKET = ']';
 
     /**
-     * Empty private constructor to prevent erroneous instantiations.
-     * @codeCoverageIgnore
+     * Empty private constructor to prevent erroneous instanciations.
      */
     private function __construct()
     {
@@ -81,7 +80,7 @@ final class StringUtils
      * @param mixed $defaultVar The default variable to return, if the variable to check is <code>null</code> (defaults
      * to the <code>NULL_STR</code> string).
      * @param mixed $quote The variable used to quote the variable returned.
-     * @return mixed The passed in variable, optionally enclosed between the given quotes if a string, or the default
+     * @return mixed The passed in variable, optionnaly enclosed between the given quotes if a string, or the default
      * one if it was <code>null</code>.
      */
     public static function defaultString($var, $defaultVar = self::NULL_STR, $quote = null)
@@ -91,18 +90,18 @@ final class StringUtils
             $result = $defaultVar;
         } elseif (is_string($var)) {
             if ($quote === null) {
-                $quote = static::QUOTE;
+                $quote = self::QUOTE;
             }
             $result = $quote . $var . $quote;
         } elseif (is_array($var)) {
             if ($quote === null) {
-                $quoteStart = static::OPEN_SQUARE_BRACKET;
-                $quoteEnd = static::CLOSE_SQUARE_BRACKET;
+                $quoteStart = self::OPEN_SQUARE_BRACKET;
+                $quoteEnd = self::CLOSE_SQUARE_BRACKET;
             } else {
                 $quoteStart = $quote;
                 $quoteEnd = $quote;
             }
-            $result = $quoteStart . static::implodeRecursively($var, static::ARRAY_VALUES_SEPARATOR, $quote, true)
+            $result = $quoteStart . self::implodeRecursively($var, self::ARRAY_VALUES_SEPARATOR, $quote, true)
                 . $quoteEnd;
         } else {
             $result = $var;
@@ -117,7 +116,7 @@ final class StringUtils
      * This method is a 'recursive' version of the PHP 'implode' method, with keys dump capability, and data types
      * management. When an inner array is found, it is imploded too, and its values can be enclosed between a
      * <code>quote</code> value. This method concats all values with the glue. When keys are shown, values are prefixed
-     * with the key and the equal sign. If <code>quote</code> is omitted, square brackets are used for inner arrays.
+     * with the key and the equal sign. If <code>quote</code> is ommitted, square brackets are used for inner arrays.
      *
      * @param array $pieces See {@link implode}.
      * @param string $glue See {@link implode}.
@@ -139,38 +138,22 @@ final class StringUtils
             }
 
             if ($showKeys) {
-                $result .= static::defaultString($key) .'=';
+                $result .= self::defaultString($key) .'=';
             }
             if (is_array($value)) {
                 if ($quote === null) {
-                    $quoteStart = static::OPEN_SQUARE_BRACKET;
-                    $quoteEnd = static::CLOSE_SQUARE_BRACKET;
+                    $quoteStart = self::OPEN_SQUARE_BRACKET;
+                    $quoteEnd = self::CLOSE_SQUARE_BRACKET;
                 } else {
                     $quoteStart = $quote;
                     $quoteEnd = $quote;
                 }
-                $result .= $quoteStart . static::implodeRecursively($value, $glue, $quote) . $quoteEnd;
+                $result .= $quoteStart . self::implodeRecursively($value, $glue, $quote) . $quoteEnd;
             } else {
-                $result .= static::defaultString($value);
+                $result .= self::defaultString($value);
             }
         }
 
         return $result;
-    }
-
-    /**
-     * Tells whether a string is blank or not.
-     *
-     * A string is blank:
-     * - if it is <code>null</code>.
-     * - if it equals the empty string, after triming whitespace characters (space, tab, line feed, carriage return,
-     * NUL byte, or vertical tab).
-     *
-     * @param string $string A string.
-     * @return bool <code>true</code> if the string is blank, <code>false</code> otherwise.
-     */
-    public static function isBlank($string)
-    {
-        return (($string === null) || (is_string($string) && (trim($string) === static::EMPTY_STR)));
     }
 }

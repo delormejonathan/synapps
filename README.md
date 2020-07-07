@@ -23,39 +23,9 @@ Syntax for changes: _`<type of modification> [domain] <description>`_
 
 `[domain]` is the name of the updated domain/component, and is optional (brackets are mandatory).
 
-`<description>` is a descriptive text of the modification.
+`<description>` is a descriptive text of the modification. 
 
-#### 1.0.7 (2017-07-31)
-
-- UPG Upgrade vendors
-- BUG Fix a test with the new PHPUnit version 6
-
-#### 1.0.6 (2017-01-06)
-
-- UPG Upgrade vendors
-- REF Move tests outside src folder
-
-#### 1.0.5 (2016-01-05)
-
-- UPG Upgrade for PHP 7
-
-#### 1.0.3 (2015-05-29)
-
-- NEW Added FileInputStream class.
-
-#### 1.0.2 (2014-10-14)
-
-- UPG Added unit test to IO/File.
-- NEW Added Util\RegexUtils class to support multi-byte string when quoting string.
-
-#### 1.0.1 (2014-10-20)
-
-- UPG Added PHPUnit 4.2+ dependency for automated testing.
-- UPG Added phpDocumentor 2.0+ dependency.
-- IMP Added many test cases to increase confidence in released packages.
-- NEW Added Http\Method class which encapsulates HTTP methods definition.
-
-#### 1.0.0 (2014-09-15)
+#### 1.0.0-it1 (2014-09-14)
 
 - NEW Migration into a dedicated VCS.
 - IMP Added test suite for the File class.
@@ -63,7 +33,7 @@ Syntax for changes: _`<type of modification> [domain] <description>`_
 ------
 ## 2. Requirements
 ### Software requirements
-- [PHP](http://www.php.net/) 5.3+
+- [PHP](http://www.php.net/) 5.5
 
 ### PHP configuration
 #### Settings

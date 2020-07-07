@@ -8,14 +8,8 @@ use Inneair\Synapps\System\OS;
 /**
  * This class encapsulates an immutable universally unique identifier (UUID).
  */
-class Uuid
+class UUID
 {
-    /**
-     * A pattern used to know if a string is a UUID.
-     * @var string
-     */
-    const REGEX_PATTERN = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$';
-
     /**
      * Low part of time.
      * @var string
@@ -73,57 +67,56 @@ class Uuid
      */
     public static function randomUuid()
     {
-        $prBits = null;
+        $pr_bits = null;
         $fp = false;
         if (OS::getInstance()->isWindows()) {
             // If /dev/urandom isn't available (eg: in non-unix systems), use mt_rand().
-            $prBits = "";
+            $pr_bits = "";
             for ($cnt = 0; $cnt < 16; $cnt++) {
-                $prBits .= chr(mt_rand(0, 255));
+                $pr_bits .= chr(mt_rand(0, 255));
             }
         } else {
             try {
                 $fp = @fopen('/dev/urandom', 'rb');
-                $prBits .= @fread($fp, 16);
-                @fclose($fp);
-            } catch (Exception $e) {
+                $pr_bits .= @fread($fp, 16);
+            } finally {
                 @fclose($fp);
             }
         }
 
-        $timeLow = bin2hex(substr($prBits, 0, 4));
-        $timeMid = bin2hex(substr($prBits, 4, 2));
-        $timeHiAndVersion = bin2hex(substr($prBits, 6, 2));
-        $clockSeqHiAndReserved = bin2hex(substr($prBits, 8, 2));
-        $node = bin2hex(substr($prBits, 10, 6));
+        $time_low = bin2hex(substr($pr_bits, 0, 4));
+        $time_mid = bin2hex(substr($pr_bits, 4, 2));
+        $time_hi_and_version = bin2hex(substr($pr_bits, 6, 2));
+        $clock_seq_hi_and_reserved = bin2hex(substr($pr_bits, 8, 2));
+        $node = bin2hex(substr($pr_bits, 10, 6));
 
         /**
          * Set the four most significant bits (bits 12 through 15) of the
-         * timeHiAndVersion field to the 4-bit version number from
+         * time_hi_and_version field to the 4-bit version number from
          * Section 4.1.3.
          *
          * @see http://tools.ietf.org/html/rfc4122#section-4.1.3
          */
-        $timeHiAndVersion = hexdec($timeHiAndVersion);
-        $timeHiAndVersion = $timeHiAndVersion >> 4;
-        $timeHiAndVersion = $timeHiAndVersion | 0x4000;
+        $time_hi_and_version = hexdec($time_hi_and_version);
+        $time_hi_and_version = $time_hi_and_version >> 4;
+        $time_hi_and_version = $time_hi_and_version | 0x4000;
 
         /**
          * Set the two most significant bits (bits 6 and 7) of the
-         * clockSeqHiAndReserved to zero and one, respectively.
+         * clock_seq_hi_and_reserved to zero and one, respectively.
          */
-        $clockSeqHiAndReserved = hexdec($clockSeqHiAndReserved);
-        $clockSeqHiAndReserved = $clockSeqHiAndReserved >> 2;
-        $clockSeqHiAndReserved = $clockSeqHiAndReserved | 0x8000;
+        $clock_seq_hi_and_reserved = hexdec($clock_seq_hi_and_reserved);
+        $clock_seq_hi_and_reserved = $clock_seq_hi_and_reserved >> 2;
+        $clock_seq_hi_and_reserved = $clock_seq_hi_and_reserved | 0x8000;
 
-        return new static($timeLow, $timeMid, $timeHiAndVersion, $clockSeqHiAndReserved, $node);
+        return new UUID($time_low, $time_mid, $time_hi_and_version, $clock_seq_hi_and_reserved, $node);
     }
 
     /**
      * {@inheritDoc}
      *
      * @return string String representation of this UUID, made up of 32 hex digits and 4 hyphens:
-     * <timeLow> '-' <timeMid> '-' <timeHiAndVersion> '-' <variant_and_sequence> '-' <node>
+     * <time_low> '-' <time_mid> '-' <time_high_and_version> '-' <variant_and_sequence> '-' <node>
      */
     public function __toString()
     {

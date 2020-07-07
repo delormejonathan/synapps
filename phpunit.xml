@@ -16,7 +16,7 @@
 
     <testsuites>
         <testsuite name="Synapps test suite">
-            <directory>tests</directory>
+            <directory>test</directory>
         </testsuite>
     </testsuites>
 
