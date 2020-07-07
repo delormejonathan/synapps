@@ -1,36 +1,30 @@
 {
-	"name": "inneair/synapps",
-	"type": "project",
-	"description": "Synapps",
-	"keywords": [
+	"name" : "inneair/synapps",
+	"version" : "1.0.0",
+	"type" : "project",
+	"description" : "Synapps",
+	"keywords" : [
 		"inneair",
 		"synapps",
 		"file",
 		"system"
 	],
-	"license": "proprietary",
-	"authors": [{
-			"name": "Innéair",
-			"homepage": "http://www.inneair.com/"
+	"license" : "proprietary",
+	"authors" : [{
+			"name" : "Innéair",
+			"homepage" : "http://www.inneair.com/"
 		}
 	],
-	"autoload": {
-		"psr-4": {
-			"Inneair\\Synapps\\": "src/",
-			"Inneair\\Synapps\\Test\\": "tests/"
+	"autoload" : {
+		"psr-4" : {
+			"Inneair\\Synapps\\" : "src/",
+			"Inneair\\Synapps\\Test\\" : "test/"
 		}
 	},
-	"require-dev": {
-		"phpunit/phpunit": "~6.2",
-		"mikey179/vfsStream": "~1.6"
-	},
-	"minimum-stability": "stable",
-	"config": {
-		"bin-dir": "bin"
-	},
-	"extra": {
-		"branch-alias": {
-			"dev-master": "1.0.x-dev"
+	"minimum-stability" : "stable",
+	"extra" : {
+		"branch-alias" : {
+			"dev-master" : "1.0.x-dev"
 		}
 	}
 }
