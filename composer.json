@@ -1,5 +1,5 @@
 {
-	"name" : "inneair/synapps",
+	"name" : "delormejonathan/synapps",
 	"version" : "1.0.0",
 	"type" : "project",
 	"description" : "Synapps",
@@ -21,7 +21,6 @@
 			"Inneair\\Synapps\\Test\\" : "test/"
 		}
 	},
-	"minimum-stability" : "stable",
 	"extra" : {
 		"branch-alias" : {
 			"dev-master" : "1.0.x-dev"
